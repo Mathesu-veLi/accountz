@@ -3,11 +3,22 @@ import { Home } from './containers/Home';
 import { Password } from './containers/Password';
 
 function App() {
+  const routes = [
+    {
+      path: '/',
+      element: <Home />,
+    },
+    {
+      path: '/password',
+      element: <Password />,
+    },
+  ];
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/password" element={<Password />} />
+        {routes.map((route) => (
+          <Route key={route.path} path={route.path} element={route.element} />
+        ))}
       </Routes>
     </BrowserRouter>
   );
