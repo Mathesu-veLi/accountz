@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { usePasswordStore } from '@/store/usePasswordStore';
 
 const formSchema = z.object({
   username: z.string(),
@@ -29,8 +30,12 @@ export function Password() {
       password: '',
     },
   });
+  const { addPassword, passwords } = usePasswordStore();
 
-  //function addPasswordToStore() {}
+  function addPasswordToStore(data: TFormSchema) {
+    addPassword(data);
+    console.log(passwords)
+  }
 
   return (
     <div className="flex justify-center items-center h-full">
@@ -38,6 +43,7 @@ export function Password() {
         <Form {...form}>
           <form
             action=""
+            onSubmit={form.handleSubmit(addPasswordToStore)}
             className="flex flex-col justify-between items-center gap-5 lg:[&_div]:w-full lg:scale-105 lg:p-5 w-full"
           >
             <h1 className="lg:text-xl font-semibold tracking-wider">Add</h1>
