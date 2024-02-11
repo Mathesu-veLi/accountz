@@ -34,11 +34,17 @@ export function Password() {
       password: '',
     },
   });
-  const { addPassword } = usePasswordStore();
+
+  const { addPassword, passwords } = usePasswordStore();
   const navigate = useNavigate();
 
-  function addPasswordToStore(data: TFormSchema) {
-    addPassword(data);
+  function addPasswordToStore(password: TFormSchema) {
+    const accountAlreadyRegistered = passwords.some(
+      (e) => e.email === password.email && e.website === password.website,
+    );
+
+    if (accountAlreadyRegistered) return toast.error('Account already registered. You didn\'t want to edit the account?');
+    addPassword(password);
     toast.success('Password saved successfully');
     navigate('/');
   }
@@ -74,7 +80,8 @@ export function Password() {
                   <FormLabel>
                     Username
                     <span className="text-gray-300 italic text-xs">
-                      {' '}- Optional
+                      {' '}
+                      - Optional
                     </span>
                   </FormLabel>
                   <FormControl>
