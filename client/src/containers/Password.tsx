@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const formSchema = z.object({
+  website: z.string().min(1),
   username: z.string(),
   email: z.string().min(1).email('Email not valid'),
   password: z.string().min(1),
@@ -27,6 +28,7 @@ export function Password() {
   const form = useForm<TFormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      website: '',
       username: '',
       email: '',
       password: '',
@@ -53,10 +55,28 @@ export function Password() {
             <h1 className="lg:text-xl font-semibold tracking-wider">Add</h1>
             <FormField
               control={form.control}
+              name="website"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Website name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="website name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel>
+                    Username
+                    <span className="text-gray-300 italic text-xs">
+                      {' '}- Optional
+                    </span>
+                  </FormLabel>
                   <FormControl>
                     <Input placeholder="username" {...field} />
                   </FormControl>
