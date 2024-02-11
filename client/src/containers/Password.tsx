@@ -34,13 +34,13 @@ export function Password() {
 
   return (
     <div className="flex justify-center items-center h-full">
-      <div className="flex flex-col justify-between items-center border rounded-sm shadow-sm p-4 w-11/12">
+      <div className="flex flex-col justify-between items-center border rounded-sm shadow-sm p-4 w-11/12 lg:w-2/6">
         <Form {...form}>
           <form
             action=""
-            className="flex flex-col justify-between items-center gap-5"
+            className="flex flex-col justify-between items-center gap-5 lg:[&_div]:w-full lg:scale-105 lg:p-5 w-full"
           >
-            <h1>Add</h1>
+            <h1 className="lg:text-xl font-semibold tracking-wider">Add</h1>
             <FormField
               control={form.control}
               name="username"
