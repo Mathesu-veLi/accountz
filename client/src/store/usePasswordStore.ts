@@ -14,7 +14,12 @@ export const usePasswordStore = create<PasswordState>()(
       passwords: [],
       addPassword: (password: IPassword) => {
         set((state) => ({
-          passwords: [...state.passwords, password],
+          passwords: [...state.passwords, {
+            id: Number(state.passwords.reverse()[0]) + 1,
+            ...password
+          }],
+        }));
+      },
         }));
       },
       deletePassword: (email: string) => {
