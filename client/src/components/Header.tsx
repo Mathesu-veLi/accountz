@@ -1,6 +1,6 @@
 import { PiGearSixLight, PiPlusCircleLight } from 'react-icons/pi';
 
-export function HomeHeader() {
+export function Header() {
   return (
     <div className="flex justify-between p-6">
       <PiGearSixLight className="w-7 h-7" />
