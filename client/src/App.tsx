@@ -2,6 +2,8 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Home } from './containers/Home';
 import { Password } from './containers/Password';
 import { Header } from './components/Header';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const routes = [
@@ -19,6 +21,7 @@ function App() {
     <>
       <BrowserRouter>
         <Header />
+        <ToastContainer theme="dark" />
         <Routes>
           {routes.map((route) => (
             <Route key={route.path} path={route.path} element={route.element} />
