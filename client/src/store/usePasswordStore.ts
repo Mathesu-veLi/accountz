@@ -2,8 +2,12 @@ import { IPassword } from '@/interfaces/IPassword';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
+interface IPasswordObject {
+  [key: string]: IPassword[];
+}
+
 interface PasswordState {
-  passwords: IPassword[];
+  passwords: IPasswordObject;
   addPassword: (password: IPassword) => void;
   updatePassword: (newPasswordData: IPassword) => void;
   deletePassword: (id: number) => void;
@@ -12,19 +16,16 @@ interface PasswordState {
 export const usePasswordStore = create<PasswordState>()(
   persist(
     (set) => ({
-      passwords: [],
+      passwords: {},
       addPassword: (password: IPassword) => {
         set((state) => ({
-          passwords: [
+          passwords: {
             ...state.passwords,
-            {
-              id:
-                state.passwords.length > 0
-                  ? Number(state.passwords.reverse()[0]) + 1
-                  : 0,
-              ...password,
-            },
-          ],
+            [password.website]: [
+              ...state.passwords[password.website],
+              password,
+            ],
+          },
         }));
       },
 
