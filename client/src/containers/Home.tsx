@@ -6,7 +6,7 @@ export function Home() {
 
   return (
     <div className="flex justify-center">
-      <div className="w-11/12 mx-10">
+      <div className="w-11/12 lg:w-3/6 mx-10">
         {passwords.map((password) => (
           <Link to={`/password/${password.id}`} key={password.website} className="flex gap-5">
             <div className="p-4 border rounded-sm w-16 h-16 flex justify-center items-center">
