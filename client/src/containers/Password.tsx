@@ -60,12 +60,12 @@ export function Password() {
     updatePassword(newPassword);
 
     toast.success('Password updated successfully');
-    navigate('/')
+    navigate('/');
   }
 
   useEffect(() => {
     const password = passwords.filter((password) => password.id == id)[0];
-    console.log(password);
+
     if (!password) {
       toast.error('Password id not exists');
       navigate('/');
