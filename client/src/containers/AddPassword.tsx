@@ -14,6 +14,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { PasswordInput } from '@/components/PasswordInput';
 
 const formSchema = z.object({
   website: z.string().min(1),
@@ -54,12 +55,12 @@ export function AddPassword() {
 
   return (
     <div className="flex justify-center items-center h-full">
-      <div className="flex flex-col justify-between items-center border rounded-sm shadow-sm p-4 w-11/12 lg:w-2/6">
+      <div className="flex flex-col justify-between items-center p-4 w-11/12 lg:w-2/6">
         <Form {...form}>
           <form
             action=""
             onSubmit={form.handleSubmit(addPasswordToStore)}
-            className="flex flex-col justify-between items-center gap-5 lg:[&_div]:w-full lg:scale-105 lg:p-5 w-full"
+            className="flex flex-col justify-between items-center gap-5 lg:[&_div]:w-full [&_div]:w-64 lg:scale-105 lg:p-5 w-full"
           >
             <h1 className="lg:text-xl font-semibold tracking-wider">Add</h1>
             <FormField
@@ -114,7 +115,7 @@ export function AddPassword() {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="password" {...field} />
+                    <PasswordInput placeholder="password" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
