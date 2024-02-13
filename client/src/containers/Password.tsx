@@ -1,3 +1,4 @@
+import { PasswordInput } from '@/components/PasswordInput';
 import { Button } from '@/components/ui/button';
 import {
   FormField,
@@ -77,7 +78,7 @@ export function Password() {
         <form
           action=""
           onSubmit={form.handleSubmit(editPassword)}
-          className="flex flex-col justify-between items-center gap-5 lg:[&_div]:w-full lg:scale-105 lg:p-5 w-full"
+          className="flex flex-col justify-between items-center gap-5 lg:[&_div]:w-full [&_div]:w-64 lg:scale-105 lg:p-5 w-full"
         >
           <h1 className="lg:text-xl font-semibold tracking-wider">
             {password?.website}
@@ -121,7 +122,7 @@ export function Password() {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input placeholder="password" {...field} type="password" />
+                  <PasswordInput placeholder="password" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
