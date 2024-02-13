@@ -21,10 +21,10 @@ export const usePasswordStore = create<PasswordState>()(
         set((state) => ({
           passwords: {
             ...state.passwords,
-            [password.website]: [
+            [password.website]: state.passwords[password.website] ? [
               ...state.passwords[password.website],
               password,
-            ],
+            ] : [password],
           },
         }));
       },
