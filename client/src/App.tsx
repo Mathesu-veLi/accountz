@@ -2,9 +2,10 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Home } from './containers/Home';
 import { Password } from './containers/Password';
 import { Header } from './components/Header';
+import { AddPassword } from './containers/AddPassword';
+import { WebsitePasswords } from './containers/WebsitePasswords';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { AddPassword } from './containers/AddPassword';
 
 function App() {
   const routes = [
@@ -17,9 +18,13 @@ function App() {
       element: <AddPassword />,
     },
     {
-      path: '/password/:id',
-      element: <Password />,
+      path: '/password/:website',
+      element: <WebsitePasswords />,
     },
+    {
+      path: '/password/:website/:index',
+      element: <Password />,
+    }
   ];
 
   return (
