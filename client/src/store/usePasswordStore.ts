@@ -15,7 +15,7 @@ export const usePasswordStore = create<PasswordState>()(
       addPassword: (password: IPassword) => {
         set((state) => ({
           passwords: [...state.passwords, {
-            id: Number(state.passwords.reverse()[0]) + 1,
+            id: state.passwords.length > 0 ? Number(state.passwords.reverse()[0]) + 1 : 0,
             ...password
           }],
         }));
