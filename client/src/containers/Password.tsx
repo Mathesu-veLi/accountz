@@ -78,7 +78,7 @@ export function Password() {
         <form
           action=""
           onSubmit={form.handleSubmit(editPassword)}
-          className="flex flex-col justify-between items-center gap-5 lg:[&_div]:w-full [&_div]:w-64 lg:scale-105 lg:p-5 w-full"
+          className="flex flex-col justify-between items-center gap-5 lg:[&_div]:w-full [&_div]:w-64 lg:scale-105 lg:p-5 w-2/6"
         >
           <h1 className="lg:text-xl font-semibold tracking-wider">
             {password?.website}
