@@ -10,7 +10,7 @@ interface PasswordState {
   passwords: IPasswordObject;
   addPassword: (password: IPassword) => void;
   updatePassword: (newPasswordData: IPassword) => void;
-  deletePassword: (id: number) => void;
+  deletePassword: (website: string, email: string) => void;
 }
 
 export const usePasswordStore = create<PasswordState>()(
@@ -32,17 +32,25 @@ export const usePasswordStore = create<PasswordState>()(
         set((state) => ({
           passwords: {
             ...state.passwords,
-            [newPasswordData.website]: state.passwords[newPasswordData.website].map((password) => {
-              if (password.email === newPasswordData.email) return newPasswordData;
+            [newPasswordData.website]: state.passwords[
+              newPasswordData.website
+            ].map((password) => {
+              if (password.email === newPasswordData.email)
+                return newPasswordData;
               return password;
-            })
-          }
+            }),
+          },
         }));
       },
 
-      deletePassword: (id: number) => {
+      deletePassword: (website: string, email: string) => {
         set((state) => ({
-          passwords: state.passwords.filter((password) => password.id !== id),
+          passwords: {
+            ...state.passwords,
+            [website]: state.passwords[website].filter(
+              (password) => password.email !== email,
+            ),
+          },
         }));
       },
     }),
