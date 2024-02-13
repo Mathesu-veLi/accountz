@@ -5,7 +5,8 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 interface PasswordState {
   passwords: IPassword[];
   addPassword: (password: IPassword) => void;
-  deletePassword: (email: string) => void;
+  updatePassword: (newPasswordData: IPassword) => void;
+  deletePassword: (id: number) => void;
 }
 
 export const usePasswordStore = create<PasswordState>()(
@@ -14,19 +15,33 @@ export const usePasswordStore = create<PasswordState>()(
       passwords: [],
       addPassword: (password: IPassword) => {
         set((state) => ({
-          passwords: [...state.passwords, {
-            id: state.passwords.length > 0 ? Number(state.passwords.reverse()[0]) + 1 : 0,
-            ...password
-          }],
+          passwords: [
+            ...state.passwords,
+            {
+              id:
+                state.passwords.length > 0
+                  ? Number(state.passwords.reverse()[0]) + 1
+                  : 0,
+              ...password,
+            },
+          ],
         }));
       },
-        }));
-      },
-      deletePassword: (email: string) => {
+
+      updatePassword: (newPasswordData: IPassword) => {
         set((state) => ({
-          passwords: state.passwords.filter(
-            (password) => password.email !== email,
-          ),
+          passwords: state.passwords.map((actualPassword) => {
+            if (actualPassword.id === newPasswordData.id)
+              return newPasswordData;
+
+            return actualPassword;
+          }),
+        }));
+      },
+
+      deletePassword: (id: number) => {
+        set((state) => ({
+          passwords: state.passwords.filter((password) => password.id !== id),
         }));
       },
     }),
