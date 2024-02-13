@@ -21,22 +21,22 @@ export const usePasswordStore = create<PasswordState>()(
         set((state) => ({
           passwords: {
             ...state.passwords,
-            [password.website]: state.passwords[password.website] ? [
-              ...state.passwords[password.website],
-              password,
-            ] : [password],
+            [password.website]: state.passwords[password.website]
+              ? [...state.passwords[password.website], password]
+              : [password],
           },
         }));
       },
 
       updatePassword: (newPasswordData: IPassword) => {
         set((state) => ({
-          passwords: state.passwords.map((actualPassword) => {
-            if (actualPassword.id === newPasswordData.id)
-              return newPasswordData;
-
-            return actualPassword;
-          }),
+          passwords: {
+            ...state.passwords,
+            [newPasswordData.website]: state.passwords[newPasswordData.website].map((password) => {
+              if (password.email === newPasswordData.email) return newPasswordData;
+              return password;
+            })
+          }
         }));
       },
 
