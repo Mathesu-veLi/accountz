@@ -65,7 +65,7 @@ export function Password() {
     },
   });
 
-  const { updatePassword } = usePasswordStore();
+  const { updatePassword, deletePassword } = usePasswordStore();
 
   function editPassword(newPasswordData: TFormSchema) {
     const accountAlreadyRegistered = globalPasswords[website].some(
@@ -91,6 +91,19 @@ export function Password() {
     updatePassword(newPassword, index);
 
     toast.success('Password updated successfully');
+    navigate('/');
+  }
+
+  function deletePasswordOfTheStore() {
+    const confirmDelete = window.confirm(
+      'Are you sure you want to delete this password?',
+    );
+
+    if (!confirmDelete) return;
+
+    deletePassword(website, password?.email as string);
+
+    toast.success('Password deleted successfully');
     navigate('/');
   }
 
@@ -148,7 +161,18 @@ export function Password() {
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <div className="flex justify-between items-center w-full lg:justify-around">
+            <Button type="submit">Submit</Button>
+            <Button
+              variant="destructive"
+              onClick={(e) => {
+                e.preventDefault();
+                deletePasswordOfTheStore();
+              }}
+            >
+              Delete account
+            </Button>
+          </div>
         </form>
       </Form>
     </div>
