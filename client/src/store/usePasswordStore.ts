@@ -9,7 +9,7 @@ interface IPasswordObject {
 interface PasswordState {
   passwords: IPasswordObject;
   addPassword: (newPassword: IPassword) => void;
-  updatePassword: (newPasswordData: IPassword) => void;
+  updatePassword: (newPasswordData: IPassword, index: number) => void;
   deletePassword: (website: string, email: string) => void;
 }
 
@@ -36,19 +36,15 @@ export const usePasswordStore = create<PasswordState>()(
         }));
       },
 
-      updatePassword: (newPasswordData: IPassword) => {
-        set((state) => ({
-          passwords: {
-            ...state.passwords,
-            [newPasswordData.website]: state.passwords[
-              newPasswordData.website
-            ].map((password) => {
-              if (password.email === newPasswordData.email)
-                return newPasswordData;
-              return password;
-            }),
-          },
-        }));
+      updatePassword: (newPasswordData: IPassword, index: number) => {
+        set((state) => {
+          const passwords = state.passwords;
+          passwords[newPasswordData.website][index] = newPasswordData;
+
+          return {
+            passwords,
+          };
+        });
       },
 
       deletePassword: (website: string, email: string) => {
