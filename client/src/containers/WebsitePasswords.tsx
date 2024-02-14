@@ -23,12 +23,10 @@ export function WebsitePasswords() {
           <Link
             to={`/password/${websiteParam}/${index}`}
             key={index}
-            className="flex gap-5"
+            className="flex p-4 border rounded-sm justify-between items-center w-full gap-5"
           >
-            <div className="p-4 border rounded-sm flex justify-center items-center gap-5">
-              <h1>{password?.email}</h1>
-              <IoMdArrowDropright />
-            </div>
+            <h1>{password?.email}</h1>
+            <IoMdArrowDropright />
           </Link>
         ))}
       </div>
