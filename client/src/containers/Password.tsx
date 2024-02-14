@@ -68,6 +68,18 @@ export function Password() {
   const { updatePassword } = usePasswordStore();
 
   function editPassword(newPasswordData: TFormSchema) {
+    const accountAlreadyRegistered = globalPasswords[website].some(
+      (passwordIterator) =>
+        passwordIterator.email === newPasswordData.email &&
+        passwordIterator.id !== password?.id,
+    );
+
+    if (accountAlreadyRegistered) {
+      toast.error(
+        "Account already registered. You didn't want to edit the account?",
+      );
+      return;
+    }
 
     const newPassword = {
       website,
