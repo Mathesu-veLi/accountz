@@ -40,14 +40,17 @@ export function AddPassword() {
   const navigate = useNavigate();
 
   function addPasswordToStore(password: TFormSchema) {
-    const accountAlreadyRegistered = passwords.some(
-      (e) => e.email === password.email && e.website === password.website,
-    );
-
-    if (accountAlreadyRegistered)
-      return toast.error(
-        "Account already registered. You didn't want to edit the account?",
+    if (passwords[password.website]) {
+      const accountAlreadyRegistered = passwords[password.website].some(
+        (e) => e.email === password.email && e.website === password.website,
       );
+
+      if (accountAlreadyRegistered)
+        return toast.error(
+          "Account already registered. You didn't want to edit the account?",
+        );
+    }
+
     addPassword(password);
     toast.success('Password saved successfully');
     navigate('/');

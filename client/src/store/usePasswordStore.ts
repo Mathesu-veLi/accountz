@@ -2,46 +2,59 @@ import { IPassword } from '@/interfaces/IPassword';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
+interface IPasswordObject {
+  [key: string]: IPassword[];
+}
+
 interface PasswordState {
-  passwords: IPassword[];
-  addPassword: (password: IPassword) => void;
-  updatePassword: (newPasswordData: IPassword) => void;
-  deletePassword: (id: number) => void;
+  passwords: IPasswordObject;
+  addPassword: (newPassword: IPassword) => void;
+  updatePassword: (newPasswordData: IPassword, index: number) => void;
+  deletePassword: (website: string, email: string) => void;
 }
 
 export const usePasswordStore = create<PasswordState>()(
   persist(
     (set) => ({
-      passwords: [],
-      addPassword: (password: IPassword) => {
+      passwords: {},
+      addPassword: (newPassword: IPassword) => {
         set((state) => ({
-          passwords: [
+          passwords: {
             ...state.passwords,
-            {
-              id:
-                state.passwords.length > 0
-                  ? Number(state.passwords.reverse()[0]) + 1
-                  : 0,
-              ...password,
-            },
-          ],
+            [newPassword.website]: state.passwords[newPassword.website]
+              ? [
+                  ...state.passwords[newPassword.website],
+                  {
+                    ...newPassword,
+                    id:
+                      (state.passwords[newPassword.website].reverse()[0]
+                        .id as number) + 1,
+                  },
+                ]
+              : [{ ...newPassword, id: 0 }],
+          },
         }));
       },
 
-      updatePassword: (newPasswordData: IPassword) => {
-        set((state) => ({
-          passwords: state.passwords.map((actualPassword) => {
-            if (actualPassword.id === newPasswordData.id)
-              return newPasswordData;
+      updatePassword: (newPasswordData: IPassword, index: number) => {
+        set((state) => {
+          const passwords = state.passwords;
+          passwords[newPasswordData.website][index] = newPasswordData;
 
-            return actualPassword;
-          }),
-        }));
+          return {
+            passwords,
+          };
+        });
       },
 
-      deletePassword: (id: number) => {
+      deletePassword: (website: string, email: string) => {
         set((state) => ({
-          passwords: state.passwords.filter((password) => password.id !== id),
+          passwords: {
+            ...state.passwords,
+            [website]: state.passwords[website].filter(
+              (password) => password.email !== email,
+            ),
+          },
         }));
       },
     }),

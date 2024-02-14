@@ -27,10 +27,29 @@ const formSchema = z.object({
 type TFormSchema = z.infer<typeof formSchema>;
 
 export function Password() {
-  const { id } = useParams();
-  const { passwords } = usePasswordStore();
-  const [password, setPassword] = useState<IPassword>();
   const navigate = useNavigate();
+
+  const website = useParams().website as string;
+  const index = Number(useParams().index as string);
+  const { passwords: globalPasswords } = usePasswordStore();
+  const [password, setPassword] = useState<IPassword>();
+
+  const websitePasswords = globalPasswords[website];
+
+  useEffect(() => {
+    if (!websitePasswords) {
+      toast.error('Website not registered');
+      return navigate('/');
+    }
+
+    const actualPassword = websitePasswords[index];
+
+    if (!actualPassword) {
+      toast.error('Password not registered');
+      return navigate(`/password/${website}`);
+    }
+    setPassword(actualPassword);
+  }, [index, navigate, website, websitePasswords]);
 
   const form = useForm<TFormSchema>({
     resolver: zodResolver(formSchema),
@@ -49,28 +68,31 @@ export function Password() {
   const { updatePassword } = usePasswordStore();
 
   function editPassword(newPasswordData: TFormSchema) {
+    const accountAlreadyRegistered = globalPasswords[website].some(
+      (passwordIterator) =>
+        passwordIterator.email === newPasswordData.email &&
+        passwordIterator.id !== password?.id,
+    );
+
+    if (accountAlreadyRegistered) {
+      toast.error(
+        "Account already registered. You didn't want to edit the account?",
+      );
+      return;
+    }
+
     const newPassword = {
-      id: password?.id as number,
-      website: password?.website as string,
+      website,
       username: newPasswordData.username as string,
       email: newPasswordData.email,
       password: newPasswordData.password,
     };
 
-    updatePassword(newPassword);
+    updatePassword(newPassword, index);
 
     toast.success('Password updated successfully');
     navigate('/');
   }
-
-  useEffect(() => {
-    const password = passwords.filter((password) => password.id == id)[0];
-
-    if (!password) {
-      toast.error('Password id not exists');
-      navigate('/');
-    } else setPassword(password);
-  }, [id, navigate, passwords]);
 
   return (
     <div className="flex justify-center items-center h-full">
@@ -80,9 +102,7 @@ export function Password() {
           onSubmit={form.handleSubmit(editPassword)}
           className="flex flex-col justify-between items-center gap-5 lg:[&_div]:w-full [&_div]:w-64 lg:scale-105 lg:p-5 w-2/6"
         >
-          <h1 className="lg:text-xl font-semibold tracking-wider">
-            {password?.website}
-          </h1>
+          <h1 className="lg:text-xl font-semibold tracking-wider">{website}</h1>
           <FormField
             control={form.control}
             name="username"
