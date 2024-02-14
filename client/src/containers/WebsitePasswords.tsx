@@ -3,10 +3,10 @@ import { Link, useParams } from 'react-router-dom';
 import { IoMdArrowDropright } from 'react-icons/io';
 
 export function WebsitePasswords() {
-  const { website: websiteParam } = useParams();
+  const websiteParam = useParams().website as string;
   const { passwords: globalPasswords } = usePasswordStore();
-  const websitePasswords = Object.entries(globalPasswords).filter(
-    ([website, passwords]) => website === websiteParam,
+  const websitePasswords = globalPasswords[websiteParam];
+  
   )[0][1];
 
   return (
