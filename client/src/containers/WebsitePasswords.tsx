@@ -1,13 +1,19 @@
 import { usePasswordStore } from '@/store/usePasswordStore';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { IoMdArrowDropright } from 'react-icons/io';
+import { toast } from 'react-toastify';
 
 export function WebsitePasswords() {
   const websiteParam = useParams().website as string;
   const { passwords: globalPasswords } = usePasswordStore();
   const websitePasswords = globalPasswords[websiteParam];
-  
-  )[0][1];
+
+  const navigate = useNavigate();
+
+  if (!websitePasswords) {
+    toast.error('Website not registered');
+    return navigate('/');
+  }
 
   return (
     <div className="flex justify-center">
