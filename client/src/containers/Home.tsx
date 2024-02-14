@@ -6,7 +6,7 @@ export function Home() {
 
   return (
     <div className="flex justify-center">
-      <div className="w-11/12 lg:w-3/6 mx-10">
+      <div className="w-11/12 lg:w-3/6 mx-10 flex flex-col gap-5">
         {Object.entries(passwords).map(([website, passwords]) => (
           <Link
             to={`/password/${website}`}
@@ -19,16 +19,18 @@ export function Home() {
             <div className="h-16">
               <h1 className="font-semibold tracking-wider">{website}</h1>
               <p className="text-sm text-gray-400">{passwords[0].username}</p>
-              <p className="text-sm text-gray-400">{passwords[0].email}</p>
-              {passwords.length > 1 && (
-                <span>
-                  +
-                  {passwords.reduce(
-                    (accountsOnThisSite) => accountsOnThisSite + 1,
-                    -1,
-                  )}
-                </span>
-              )}
+              <div className="flex justify-center items-center text-sm text-gray-400 gap-3">
+                <p>{passwords[0].email}</p>
+                {passwords.length > 1 && (
+                  <span>
+                    +
+                    {passwords.reduce(
+                      (accountsOnThisSite) => accountsOnThisSite + 1,
+                      -1,
+                    )}
+                  </span>
+                )}
+              </div>
             </div>
           </Link>
         ))}
