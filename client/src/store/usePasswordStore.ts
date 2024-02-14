@@ -8,7 +8,7 @@ interface IPasswordObject {
 
 interface PasswordState {
   passwords: IPasswordObject;
-  addPassword: (password: IPassword) => void;
+  addPassword: (newPassword: IPassword) => void;
   updatePassword: (newPasswordData: IPassword) => void;
   deletePassword: (website: string, email: string) => void;
 }
@@ -17,13 +17,21 @@ export const usePasswordStore = create<PasswordState>()(
   persist(
     (set) => ({
       passwords: {},
-      addPassword: (password: IPassword) => {
+      addPassword: (newPassword: IPassword) => {
         set((state) => ({
           passwords: {
             ...state.passwords,
-            [password.website]: state.passwords[password.website]
-              ? [...state.passwords[password.website], password]
-              : [password],
+            [newPassword.website]: state.passwords[newPassword.website]
+              ? [
+                  ...state.passwords[newPassword.website],
+                  {
+                    ...newPassword,
+                    id:
+                      (state.passwords[newPassword.website].reverse()[0]
+                        .id as number) + 1,
+                  },
+                ]
+              : [{ ...newPassword, id: 0 }],
           },
         }));
       },
