@@ -3,6 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { generatePasswordHash } from '../utils/passwordUtils';
+import { userNotExists } from 'src/errors/userNotExists';
 
 @Injectable()
 export class UsersService {
@@ -25,10 +26,15 @@ export class UsersService {
   }
 
   async findOne(id: number) {
-    return this.prismaService.users.findUnique({ where: { id } });
+    const user = await this.prismaService.users.findUnique({ where: { id } });
+    if (!user) userNotExists();
+    return user;
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
+    const user = await this.prismaService.users.findUnique({ where: { id } });
+    if (!user) userNotExists();
+
     return this.prismaService.users.update({
       where: { id },
       data: updateUserDto,
@@ -36,6 +42,9 @@ export class UsersService {
   }
 
   async remove(id: number) {
+    const user = await this.prismaService.users.findUnique({ where: { id } });
+    if (!user) userNotExists();
+
     return this.prismaService.users.delete({ where: { id } });
   }
 }
