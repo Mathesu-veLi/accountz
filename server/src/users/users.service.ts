@@ -26,14 +26,21 @@ export class UsersService {
   }
 
   async findOne(id: number) {
-    const user = await this.prismaService.users.findUnique({ where: { id } });
-    if (!user) userNotExists();
+    const user = await this.prismaService.users
+      .findUniqueOrThrow({
+        where: { id },
+      })
+      .catch(() => userNotExists());
+
     return user;
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    const user = await this.prismaService.users.findUnique({ where: { id } });
-    if (!user) userNotExists();
+    await this.prismaService.users
+      .findUniqueOrThrow({
+        where: { id },
+      })
+      .catch(() => userNotExists());
 
     return this.prismaService.users.update({
       where: { id },
@@ -42,8 +49,11 @@ export class UsersService {
   }
 
   async remove(id: number) {
-    const user = await this.prismaService.users.findUnique({ where: { id } });
-    if (!user) userNotExists();
+    await this.prismaService.users
+      .findUniqueOrThrow({
+        where: { id },
+      })
+      .catch(() => userNotExists());
 
     return this.prismaService.users.delete({ where: { id } });
   }
