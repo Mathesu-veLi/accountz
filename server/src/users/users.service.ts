@@ -22,13 +22,20 @@ export class UsersService {
   }
 
   findAll() {
-    return this.prismaService.users.findMany();
+    return this.prismaService.users.findMany({
+      include: {
+        passwords: true,
+      },
+    });
   }
 
   async findOne(id: number) {
     const user = await this.prismaService.users
       .findUniqueOrThrow({
         where: { id },
+        include: {
+          passwords: true,
+        },
       })
       .catch(() => userNotExists());
 
