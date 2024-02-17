@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTokenDto } from './dto/create-token.dto';
-import { PrismaService } from '../prisma/prisma.module';
+import { PrismaService } from '../../prisma/prisma.module';
 import { sign } from 'jsonwebtoken';
-import { passwordIsNotValid, userNotExists } from '../utils/throws';
-import { passwordIsValid } from '../utils/passwordUtils';
+import { passwordIsNotValid, userNotExists } from '../../utils/throws';
+import { passwordIsValid } from '../../utils/passwordUtils';
 
 @Injectable()
 export class TokenService {
