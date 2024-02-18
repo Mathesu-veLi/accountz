@@ -1,15 +1,33 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, Scope } from '@nestjs/common';
 import { CreatePasswordDto } from './dto/create-password.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { REQUEST } from '@nestjs/core';
+import { decode } from 'jsonwebtoken';
+import { Request } from 'express';
 
-@Injectable()
+interface ITokenDecoded {
+  id: number;
+  email: string;
+}
+
+@Injectable({ scope: Scope.REQUEST })
 export class PasswordsService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    @Inject(REQUEST) private readonly request: Request,
+    private prismaService: PrismaService,
+  ) {}
+
+  private get userId() {
+    const { authorization } = this.request.headers;
+    const [, token] = authorization.split(' ');
+    const decoded = decode(token) as ITokenDecoded;
+    return decoded.id;
+  }
 
   create(createPasswordDto: CreatePasswordDto) {
     return this.prismaService.passwords.create({
-      data: createPasswordDto,
+      data: { ...createPasswordDto, userId: this.userId },
     });
   }
 
