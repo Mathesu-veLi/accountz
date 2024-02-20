@@ -3,22 +3,28 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { generatePasswordHash } from '../../utils/passwordUtils';
-import { userNotExists } from 'src/utils/throws';
+import { userAlreadyExist, userNotExists } from 'src/utils/throws';
 
 @Injectable()
 export class UsersService {
   constructor(private prismaService: PrismaService) {}
 
-  create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto) {
     const passwordHash = generatePasswordHash(createUserDto.password);
 
-    return this.prismaService.users.create({
-      data: {
-        name: createUserDto.name,
-        email: createUserDto.email,
-        password: passwordHash,
-      },
-    });
+    const user = await this.prismaService.users
+      .create({
+        data: {
+          name: createUserDto.name,
+          email: createUserDto.email,
+          password: passwordHash,
+        },
+      })
+      .catch((e) => {
+        if (e.code === 'P2002') userAlreadyExist();
+      });
+
+    return user;
   }
 
   findAll() {
