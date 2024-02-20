@@ -36,7 +36,23 @@ export function Login() {
     },
   });
 
+  function loginUser(form: TFormSchema) {
+    api
+      .post('/tokens', {
+        email: form.email,
+        password: form.password,
+      })
+      .then((res) => {
+        setUser(res.data.user);
+        setToken(res.data.token);
 
+        toast.success('Successfully logged in');
+        navigate('/');
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
+      });
+  }
 
   return (
     <div className="flex justify-center items-center h-screen">
