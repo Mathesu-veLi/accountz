@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button';
 import { PasswordInput } from '@/components/PasswordInput';
 import { api } from '@/lib/axios';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const formSchema = z
   .object({
@@ -30,6 +31,8 @@ const formSchema = z
 type TFormSchema = z.infer<typeof formSchema>;
 
 export function Register() {
+  const navigate = useNavigate();
+
   const form = useForm<TFormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -41,14 +44,15 @@ export function Register() {
   });
 
   function registerUser(form: TFormSchema) {
-    const user = api
+    api
       .post('/users', {
         name: form.username,
         email: form.email,
         password: form.password,
       })
-      .then((response) => {
-        console.log(response);
+      .then(() => {
+        toast.success('Account successfully created');
+        navigate('/login');
       })
       .catch((err) => {
         toast.error(err.response.data.message);
