@@ -12,16 +12,18 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { PasswordInput } from '@/components/PasswordInput';
+import { api } from '@/lib/axios';
+import { toast } from 'react-toastify';
 
 const formSchema = z
   .object({
-    username: z.string(),
+    username: z.string().min(1),
     email: z.string().min(1).email('Email not valid'),
-    password: z.string().min(1),
-    confirmPassword: z.string().min(1),
+    password: z.string().min(6).max(25),
+    confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    path: ['password'],
+    path: ['confirmPassword'],
     message: "Passwords don't match",
   });
 
@@ -38,11 +40,30 @@ export function Register() {
     },
   });
 
+  function registerUser(form: TFormSchema) {
+    const user = api
+      .post('/users', {
+        name: form.username,
+        email: form.email,
+        password: form.password,
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
+      });
+  }
+
   return (
     <div className="flex justify-center items-center h-screen">
       <div className="flex flex-col justify-between items-center p-4 w-11/12 lg:w-2/6">
         <Form {...form}>
-          <form className="flex flex-col justify-between items-center gap-5 lg:[&_div]:w-full [&_div]:w-64 lg:scale-105 lg:p-5 w-full">
+          <form
+            action=""
+            onSubmit={form.handleSubmit(registerUser)}
+            className="flex flex-col justify-between items-center gap-5 lg:[&_div]:w-full [&_div]:w-64 lg:scale-105 lg:p-5 w-full"
+          >
             <h1 className="lg:text-xl font-semibold tracking-wider">
               Register
             </h1>
