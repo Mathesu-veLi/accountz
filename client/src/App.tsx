@@ -7,6 +7,7 @@ import { WebsitePasswords } from './containers/WebsitePasswords';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Register } from './containers/Register';
+import { Login } from './containers/Login';
 
 function App() {
   const routes = [
@@ -29,6 +30,10 @@ function App() {
     {
       path: '/password/:website/:index',
       element: <Password />,
+    },
+    {
+      path: '/login',
+      element: <Login />,
     },
   ];
 
