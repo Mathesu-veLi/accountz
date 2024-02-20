@@ -11,16 +11,16 @@ datasource db {
 }
 
 model Users {
-  id        Int        @id @default(autoincrement())
+  id        Int         @id @default(autoincrement())
   name      String
-  email     String     @unique
+  email     String      @unique
   password  String
   passwords Passwords[]
 }
 
 model Passwords {
   id       Int    @id @default(autoincrement())
-  user     Users  @relation(fields: [userId], references: [id])
+  user     Users  @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId   Int    @map("usersId")
   website  String
   username String
