@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { api } from '@/lib/axios';
 import { toast } from 'react-toastify';
 import { useUserStore } from '@/store/useUserStore';
+import { useEffect } from 'react';
 
 const formSchema = z.object({
   email: z.string().min(1).email('Email not valid'),
@@ -26,6 +27,7 @@ type TFormSchema = z.infer<typeof formSchema>;
 
 export function Login() {
   const { setUser, setToken } = useUserStore();
+  const { id } = useUserStore().user;
   const navigate = useNavigate();
 
   const form = useForm<TFormSchema>({
@@ -34,6 +36,13 @@ export function Login() {
       email: '',
       password: '',
     },
+  });
+
+  useEffect(() => {
+    if (id) {
+      toast('User already logged in');
+      navigate('/');
+    }
   });
 
   function loginUser(form: TFormSchema) {

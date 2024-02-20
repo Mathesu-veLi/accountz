@@ -15,6 +15,8 @@ import { PasswordInput } from '@/components/PasswordInput';
 import { api } from '@/lib/axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { useUserStore } from '@/store/useUserStore';
+import { useEffect } from 'react';
 
 const formSchema = z
   .object({
@@ -31,6 +33,7 @@ const formSchema = z
 type TFormSchema = z.infer<typeof formSchema>;
 
 export function Register() {
+  const { id } = useUserStore().user;
   const navigate = useNavigate();
 
   const form = useForm<TFormSchema>({
@@ -41,6 +44,13 @@ export function Register() {
       password: '',
       confirmPassword: '',
     },
+  });
+
+  useEffect(() => {
+    if (id) {
+      toast('User already logged in');
+      navigate('/');
+    }
   });
 
   function registerUser(form: TFormSchema) {
