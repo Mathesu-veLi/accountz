@@ -15,6 +15,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { PasswordInput } from '@/components/PasswordInput';
+import { useEffect } from 'react';
+import { useUserStore } from '@/store/useUserStore';
 
 const formSchema = z.object({
   website: z.string().min(1),
@@ -26,6 +28,8 @@ const formSchema = z.object({
 type TFormSchema = z.infer<typeof formSchema>;
 
 export function AddPassword() {
+  const { id } = useUserStore().user;
+
   const form = useForm<TFormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -38,6 +42,13 @@ export function AddPassword() {
 
   const { addPassword, passwords } = usePasswordStore();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!id) {
+      toast('Please log in first');
+      navigate('/login');
+    }
+  }, [id, navigate]);
 
   function addPasswordToStore(password: TFormSchema) {
     if (passwords[password.website]) {
