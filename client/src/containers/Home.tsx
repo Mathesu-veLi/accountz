@@ -1,18 +1,15 @@
 import { WebsitePasswordCard } from '@/components/WebsitePasswordCard';
+import { IAccount } from '@/interfaces/IAccount';
 import { api } from '@/lib/axios';
+import { useAccountStore } from '@/store/useAccountStore';
 import { useUserStore } from '@/store/useUserStore';
 import { useEffect, useState } from 'react';
 
-interface IAccount {
-  website: string;
-  username: string;
-  email: string;
-  password: string;
-}
-
 export function Home() {
   const { id } = useUserStore().user;
+  const { setAccounts: setStateAccounts } = useAccountStore();
   const [passwords, setPasswords] = useState<IAccount[]>([]);
+  const [accounts, setAccounts] = useState<Record<string, IAccount[]>>();
 
   useEffect(() => {
     api.get(`users/${id}`).then((res) => {
@@ -20,12 +17,15 @@ export function Home() {
     });
   }, [id]);
 
-  const accounts: Record<string, IAccount[]> = {};
-  passwords.forEach((pass) => {
-    if (!accounts[pass.website]) return (accounts[pass.website] = [pass]);
-    return accounts[pass.website].push(pass);
-  });
-
+  useEffect(() => {
+    const accounts: Record<string, IAccount[]> = {};
+    passwords.forEach((pass) => {
+      if (!accounts[pass.website]) return (accounts[pass.website] = [pass]);
+      return accounts[pass.website].push(pass);
+    });
+    setStateAccounts(accounts);
+    setAccounts(accounts);
+  }, [passwords, setAccounts, setStateAccounts]);
 
   if (!passwords)
     return (
@@ -34,16 +34,20 @@ export function Home() {
       </div>
     );
 
+    if(!accounts) return
+
   return (
     <div className="flex justify-center">
       <div className="w-11/12 lg:w-3/6 mx-10 flex flex-col gap-5">
-        {Object.entries(accounts).map(([website, passwords]) => (
-          <WebsitePasswordCard
-            website={website}
-            password={passwords[0]}
-            quantityOfPasswords={passwords.length}
-          />
-        ))}
+        {Object.entries(accounts).map(
+          ([website, passwords]) => (
+            <WebsitePasswordCard
+              website={website}
+              password={passwords[0]}
+              quantityOfPasswords={passwords.length}
+            />
+          ),
+        )}
       </div>
     </div>
   );
