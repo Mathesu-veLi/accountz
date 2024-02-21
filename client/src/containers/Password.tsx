@@ -9,8 +9,10 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { IPassword } from '@/interfaces/IPassword';
-import { usePasswordStore } from '@/store/usePasswordStore';
+import { IAccount } from '@/interfaces/IAccount';
+import { api } from '@/lib/axios';
+import { useAccountStore } from '@/store/useAccountStore';
+import { useUserStore } from '@/store/useUserStore';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -31,10 +33,11 @@ export function Password() {
 
   const website = useParams().website as string;
   const index = Number(useParams().index as string);
-  const { passwords: globalPasswords } = usePasswordStore();
-  const [password, setPassword] = useState<IPassword>();
+  const { accounts } = useAccountStore();
+  const { token } = useUserStore();
+  const [password, setPassword] = useState<IAccount>();
 
-  const websitePasswords = globalPasswords[website];
+  const websitePasswords = (accounts as Record<string, IAccount[]>)[website];
 
   useEffect(() => {
     if (!websitePasswords) {
@@ -65,10 +68,8 @@ export function Password() {
     },
   });
 
-  const { updatePassword, deletePassword } = usePasswordStore();
-
   function editPassword(newPasswordData: TFormSchema) {
-    const accountAlreadyRegistered = globalPasswords[website].some(
+    const accountAlreadyRegistered = websitePasswords.some(
       (passwordIterator) =>
         passwordIterator.email === newPasswordData.email &&
         passwordIterator.id !== password?.id,
@@ -88,10 +89,17 @@ export function Password() {
       password: newPasswordData.password,
     };
 
-    updatePassword(newPassword, index);
-
-    toast.success('Password updated successfully');
-    navigate('/');
+    api
+      .patch(`/passwords/${password?.id}`, newPassword, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(() => {
+        toast.success('Password updated successfully');
+        navigate('/');
+      })
+      .catch((e) => toast.error(e.response.data.message));
   }
 
   function deletePasswordOfTheStore() {
@@ -101,8 +109,17 @@ export function Password() {
 
     if (!confirmDelete) return;
 
-    deletePassword(website, password?.email as string);
-
+    api
+      .delete(`/passwords/${password?.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(() => {
+        toast.success('Password deleted successfully');
+        navigate('/');
+      })
+      .catch((e) => toast.error(e.response.data.message));
     toast.success('Password deleted successfully');
     navigate('/');
   }

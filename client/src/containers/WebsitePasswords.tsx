@@ -1,13 +1,16 @@
-import { usePasswordStore } from '@/store/usePasswordStore';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { IoMdArrowDropright } from 'react-icons/io';
 import { toast } from 'react-toastify';
 import { useEffect } from 'react';
+import { useAccountStore } from '@/store/useAccountStore';
+import { IAccount } from '@/interfaces/IAccount';
 
 export function WebsitePasswords() {
   const websiteParam = useParams().website as string;
-  const { passwords: globalPasswords } = usePasswordStore();
-  const websitePasswords = globalPasswords[websiteParam];
+  const { accounts } = useAccountStore();
+  const websitePasswords = (accounts as Record<string, IAccount[]>)[
+    websiteParam
+  ];
 
   const navigate = useNavigate();
 
@@ -16,7 +19,7 @@ export function WebsitePasswords() {
       toast.error('Website not registered');
       return navigate('/');
     }
-  }, [navigate, websitePasswords]);
+  });
 
   return (
     <div className="flex justify-center">

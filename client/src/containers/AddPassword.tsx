@@ -8,13 +8,15 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { usePasswordStore } from '@/store/usePasswordStore';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { PasswordInput } from '@/components/PasswordInput';
+import { useEffect } from 'react';
+import { useUserStore } from '@/store/useUserStore';
+import { api } from '@/lib/axios';
 
 const formSchema = z.object({
   website: z.string().min(1),
@@ -26,6 +28,8 @@ const formSchema = z.object({
 type TFormSchema = z.infer<typeof formSchema>;
 
 export function AddPassword() {
+  const { id } = useUserStore().user;
+
   const form = useForm<TFormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -36,24 +40,39 @@ export function AddPassword() {
     },
   });
 
-  const { addPassword, passwords } = usePasswordStore();
+  const { token } = useUserStore();
   const navigate = useNavigate();
 
-  function addPasswordToStore(password: TFormSchema) {
-    if (passwords[password.website]) {
-      const accountAlreadyRegistered = passwords[password.website].some(
-        (e) => e.email === password.email && e.website === password.website,
-      );
-
-      if (accountAlreadyRegistered)
-        return toast.error(
-          "Account already registered. You didn't want to edit the account?",
-        );
+  useEffect(() => {
+    if (!id) {
+      toast('Please log in first');
+      navigate('/login');
     }
+  }, [id, navigate]);
 
-    addPassword(password);
-    toast.success('Password saved successfully');
-    navigate('/');
+  function addPasswordToStore(password: TFormSchema) {
+    api
+      .post(
+        '/passwords',
+        {
+          website: password.website,
+          username: password.username,
+          email: password.email,
+          password: password.password,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      )
+      .then(() => {
+        toast.success('Password saved successfully');
+        navigate('/');
+      })
+      .catch((e) => {
+        toast.error(e.response.data.message);
+      });
   }
 
   return (
