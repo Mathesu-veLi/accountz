@@ -8,7 +8,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { usePasswordStore } from '@/store/usePasswordStore';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -17,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { PasswordInput } from '@/components/PasswordInput';
 import { useEffect } from 'react';
 import { useUserStore } from '@/store/useUserStore';
+import { api } from '@/lib/axios';
 
 const formSchema = z.object({
   website: z.string().min(1),
@@ -40,7 +40,7 @@ export function AddPassword() {
     },
   });
 
-  const { addPassword, passwords } = usePasswordStore();
+  const { token } = useUserStore();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -51,20 +51,28 @@ export function AddPassword() {
   }, [id, navigate]);
 
   function addPasswordToStore(password: TFormSchema) {
-    if (passwords[password.website]) {
-      const accountAlreadyRegistered = passwords[password.website].some(
-        (e) => e.email === password.email && e.website === password.website,
-      );
-
-      if (accountAlreadyRegistered)
-        return toast.error(
-          "Account already registered. You didn't want to edit the account?",
-        );
-    }
-
-    addPassword(password);
-    toast.success('Password saved successfully');
-    navigate('/');
+    api
+      .post(
+        '/passwords',
+        {
+          website: password.website,
+          username: password.username,
+          email: password.email,
+          password: password.password,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      )
+      .then(() => {
+        toast.success('Password saved successfully');
+        navigate('/');
+      })
+      .catch((e) => {
+        toast.error(e.response.data.message);
+      });
   }
 
   return (
