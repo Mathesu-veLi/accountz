@@ -11,3 +11,7 @@ export function userAlreadyExist() {
 export function passwordIsNotValid() {
   throw new HttpException('Password is not valid', HttpStatus.BAD_REQUEST);
 }
+
+export function accountAlreadyRegistered() {
+  throw new HttpException('Account already registered', HttpStatus.CONFLICT);
+}

@@ -5,6 +5,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { REQUEST } from '@nestjs/core';
 import { decode } from 'jsonwebtoken';
 import { Request } from 'express';
+import { accountAlreadyRegistered } from 'src/utils/throws';
 
 interface ITokenDecoded {
   id: number;
@@ -26,9 +27,14 @@ export class PasswordsService {
   }
 
   create(createPasswordDto: CreatePasswordDto) {
-    return this.prismaService.passwords.create({
-      data: { ...createPasswordDto, userId: this.userId },
-    });
+    //TODO: encrypt password
+    return this.prismaService.passwords
+      .create({
+        data: { ...createPasswordDto, userId: this.userId },
+      })
+      .catch((e) => {
+        if (e.code === 'P2002') accountAlreadyRegistered();
+      });
   }
 
   findAll() {
