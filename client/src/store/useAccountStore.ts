@@ -5,6 +5,7 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 interface UserState {
   accounts?: Record<string, IAccount[]>;
   setAccounts: (accounts: Record<string, IAccount[]>) => void;
+  reset: () => void;
 }
 
 const initialState = {

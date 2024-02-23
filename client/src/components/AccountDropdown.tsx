@@ -9,15 +9,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useUserStore } from '@/store/useUserStore';
-import { toast } from 'react-toastify';
+import { useAccountStore } from '@/store/useAccountStore';
 
 export function AccountDropdown() {
   const { name } = useUserStore().user;
-  const { reset } = useUserStore();
+  const { reset: resetUser } = useUserStore();
+  const { reset: resetAccounts } = useAccountStore();
 
-  const navigate = useNavigate();
+  function logout() {
+    resetUser();
+    resetAccounts();
+    window.location.reload();
+  }
 
   return (
     <DropdownMenu>
@@ -45,15 +50,7 @@ export function AccountDropdown() {
             </div>
           ) : (
             <div>
-              <DropdownMenuItem
-                onClick={() => {
-                  toast('User successfully logged out');
-                  navigate('/');
-                  reset();
-                }}
-              >
-                Logout
-              </DropdownMenuItem>
+              <DropdownMenuItem onClick={logout}>Logout</DropdownMenuItem>
             </div>
           )}
         </DropdownMenuGroup>
