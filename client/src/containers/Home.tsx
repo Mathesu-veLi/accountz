@@ -27,27 +27,25 @@ export function Home() {
     setAccounts(accounts);
   }, [passwords, setAccounts, setStateAccounts]);
 
-  if (!passwords)
+  if (!passwords.length)
     return (
       <div className="flex justify-center items-center h-screen">
         <h1 className="text-2xl font-light">No password registered</h1>
       </div>
     );
 
-    if(!accounts) return
+  if (!accounts) return;
 
   return (
     <div className="flex justify-center">
       <div className="w-11/12 lg:w-3/6 mx-10 flex flex-col gap-5">
-        {Object.entries(accounts).map(
-          ([website, passwords]) => (
-            <WebsitePasswordCard
-              website={website}
-              password={passwords[0]}
-              quantityOfPasswords={passwords.length}
-            />
-          ),
-        )}
+        {Object.entries(accounts).map(([website, passwords]) => (
+          <WebsitePasswordCard
+            website={website}
+            password={passwords[0]}
+            quantityOfPasswords={passwords.length}
+          />
+        ))}
       </div>
     </div>
   );
