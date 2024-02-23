@@ -19,13 +19,14 @@ model Users {
 }
 
 model Passwords {
-  id       Int    @id @default(autoincrement())
-  user     Users  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId   Int    @map("usersId")
-  website  String
-  username String
-  email    String
-  password String
+  id         Int    @id @default(autoincrement())
+  user       Users  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     Int    @map("usersId")
+  website    String
+  websiteUrl String
+  username   String
+  email      String
+  password   String
 
-  @@unique([website, email])
+  @@unique([website, websiteUrl, email])
 }
