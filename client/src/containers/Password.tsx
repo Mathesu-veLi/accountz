@@ -84,6 +84,7 @@ export function Password() {
 
     const newPassword = {
       website,
+      websiteUrl: password?.websiteUrl,
       username: newPasswordData.username as string,
       email: newPasswordData.email,
       password: newPasswordData.password,
@@ -99,7 +100,10 @@ export function Password() {
         toast.success('Password updated successfully');
         navigate('/');
       })
-      .catch((e) => toast.error(e.response.data.message));
+      .catch((e) => {
+        console.log(e);
+        toast.error(e.response.data.message);
+      });
   }
 
   function deletePasswordOfTheStore() {

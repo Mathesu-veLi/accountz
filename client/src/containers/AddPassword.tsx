@@ -20,6 +20,7 @@ import { api } from '@/lib/axios';
 
 const formSchema = z.object({
   website: z.string().min(1),
+  websiteUrl: z.string(),
   username: z.string(),
   email: z.string().min(1).email('Email not valid'),
   password: z.string().min(1),
@@ -34,6 +35,7 @@ export function AddPassword() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       website: '',
+      websiteUrl: '',
       username: '',
       email: '',
       password: '',
@@ -56,6 +58,7 @@ export function AddPassword() {
         '/passwords',
         {
           website: password.website,
+          websiteUrl: password.websiteUrl,
           username: password.username,
           email: password.email,
           password: password.password,
@@ -71,6 +74,7 @@ export function AddPassword() {
         navigate('/');
       })
       .catch((e) => {
+        console.log(e);
         toast.error(e.response.data.message);
       });
   }
@@ -92,7 +96,20 @@ export function AddPassword() {
                 <FormItem>
                   <FormLabel>Website name</FormLabel>
                   <FormControl>
-                    <Input placeholder="website name" {...field} />
+                    <Input placeholder="Netflix" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="websiteUrl"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Website url</FormLabel>
+                  <FormControl>
+                    <Input placeholder="www.netflix.com" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -5,6 +5,9 @@ export class CreatePasswordDto {
   website: string;
 
   @IsNotEmpty()
+  websiteUrl: string;
+
+  @IsNotEmpty()
   username: string;
 
   @IsEmail()
