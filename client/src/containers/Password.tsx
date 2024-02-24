@@ -36,7 +36,8 @@ export function Password() {
   const index = Number(useParams().index as string);
   const { accounts } = useAccountStore();
   const { token } = useUserStore();
-  const [password, setPassword] = useState<IAccount>();
+  const [account, setAccount] = useState<IAccount>();
+  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const websitePasswords = (accounts as Record<string, IAccount[]>)[website];
@@ -47,14 +48,24 @@ export function Password() {
       return navigate('/');
     }
 
-    const actualPassword = websitePasswords[index];
+    const actualAccount = websitePasswords[index];
 
-    if (!actualPassword) {
-      toast.error('Password not registered');
+    if (!actualAccount) {
+      toast.error('Account not registered');
       return navigate(`/password/${website}`);
     }
-    setPassword(actualPassword);
-  }, [index, navigate, website, websitePasswords]);
+    api
+      .get(`/passwords/${actualAccount.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setPassword(res.data.password);
+      });
+
+    setAccount(actualAccount);
+  }, [index, navigate, token, website, websitePasswords]);
 
   const form = useForm<TFormSchema>({
     resolver: zodResolver(formSchema),
@@ -64,9 +75,9 @@ export function Password() {
       password: '',
     },
     values: {
-      username: password?.username as string,
-      email: password?.email as string,
-      password: password?.password as string,
+      username: account?.username as string,
+      email: account?.email as string,
+      password: password,
     },
   });
 
@@ -75,7 +86,7 @@ export function Password() {
     const accountAlreadyRegistered = websitePasswords.some(
       (passwordIterator) =>
         passwordIterator.email === newPasswordData.email &&
-        passwordIterator.id !== password?.id,
+        passwordIterator.id !== account?.id,
     );
 
     if (accountAlreadyRegistered) {
@@ -87,14 +98,14 @@ export function Password() {
 
     const newPassword = {
       website,
-      websiteUrl: password?.websiteUrl,
+      websiteUrl: account?.websiteUrl,
       username: newPasswordData.username as string,
       email: newPasswordData.email,
       password: newPasswordData.password,
     };
 
     await api
-      .patch(`/passwords/${password?.id}`, newPassword, {
+      .patch(`/passwords/${account?.id}`, newPassword, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -120,7 +131,7 @@ export function Password() {
     if (!confirmDelete) return;
 
     await api
-      .delete(`/passwords/${password?.id}`, {
+      .delete(`/passwords/${account?.id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

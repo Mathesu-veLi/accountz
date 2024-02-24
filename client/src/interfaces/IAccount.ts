@@ -4,5 +4,5 @@ export interface IAccount {
   websiteUrl: string;
   username: string;
   email: string;
-  password: string;
+  password?: string;
 }

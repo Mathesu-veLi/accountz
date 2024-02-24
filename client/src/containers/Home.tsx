@@ -16,10 +16,17 @@ export function Home() {
   useEffect(() => {
     if (id) {
       setIsLoading(true);
-      api.get(`users/${id}`).then((res) => {
-        setIsLoading(false);
-        setGlobalPasswords(res.data.passwords);
-      });
+      api
+        .get(`users/${id}`)
+        .then((res: { data: { passwords: IAccount[] } }) => {
+          setIsLoading(false);
+          const accounts = res.data.passwords.map((website) => {
+            delete website.password;
+            return website;
+          });
+
+          setGlobalPasswords(accounts);
+        });
     }
   }, [id]);
 
