@@ -8,6 +8,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Register } from './containers/Register';
 import { Login } from './containers/Login';
+import { PageNotFound } from './containers/PageNotFound';
 
 function App() {
   const routes = [
@@ -38,6 +39,10 @@ function App() {
     {
       path: '/login',
       element: <Login />,
+    },
+    {
+      path: '*',
+      element: <PageNotFound />,
     },
   ];
 
