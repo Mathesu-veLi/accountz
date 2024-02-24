@@ -20,7 +20,6 @@ export function Home() {
   }, [id]);
 
   useEffect(() => {
-    if (!globalPasswords.length) return;
     globalPasswords.forEach((pass) => {
       if (!accountsTemp[pass.website])
         return (accountsTemp[pass.website] = [pass]);
