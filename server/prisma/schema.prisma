@@ -11,14 +11,14 @@ datasource db {
 }
 
 model Users {
-  id        Int         @id @default(autoincrement())
-  name      String
-  email     String      @unique
-  password  String
-  passwords Passwords[]
+  id       Int        @id @default(autoincrement())
+  name     String
+  email    String     @unique
+  password String
+  accounts Accounts[]
 }
 
-model Passwords {
+model Accounts {
   id         Int    @id @default(autoincrement())
   user       Users  @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     Int    @map("usersId")

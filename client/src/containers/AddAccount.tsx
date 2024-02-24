@@ -29,7 +29,7 @@ const formSchema = z.object({
 
 type TFormSchema = z.infer<typeof formSchema>;
 
-export function AddPassword() {
+export function AddAccounts() {
   const { id } = useUserStore().user;
   const form = useForm<TFormSchema>({
     resolver: zodResolver(formSchema),
@@ -53,17 +53,17 @@ export function AddPassword() {
     }
   }, [id, navigate]);
 
-  async function addPasswordToStore(password: TFormSchema) {
+  async function addAccountToStore(account: TFormSchema) {
     setIsLoading(true);
     await api
       .post(
-        '/passwords',
+        '/accounts',
         {
-          website: password.website,
-          websiteUrl: password.websiteUrl,
-          username: password.username,
-          email: password.email,
-          password: password.password,
+          website: account.website,
+          websiteUrl: account.websiteUrl,
+          username: account.username,
+          email: account.email,
+          password: account.password,
         },
         {
           headers: {
@@ -72,8 +72,8 @@ export function AddPassword() {
         },
       )
       .then(() => {
-        toast.success('Password saved successfully');
-        navigate('/');
+        toast.success('Account saved successfully');
+        navigate('/dashboard');
       })
       .catch((e) => toast.error(e.response.data.message));
     setIsLoading(false);
@@ -85,7 +85,7 @@ export function AddPassword() {
         <Form {...form}>
           <form
             action=""
-            onSubmit={form.handleSubmit(addPasswordToStore)}
+            onSubmit={form.handleSubmit(addAccountToStore)}
             className="flex flex-col justify-between items-center gap-5 lg:[&_div]:w-full [&_div]:w-64 lg:scale-105 lg:p-5 w-full"
           >
             <h1 className="lg:text-xl font-semibold tracking-wider">Add</h1>
@@ -163,7 +163,7 @@ export function AddPassword() {
             {isLoading ? (
               <ButtonLoading />
             ) : (
-              <Button type="submit">Submit</Button>
+              <Button type="submit">Add account</Button>
             )}
           </form>
         </Form>

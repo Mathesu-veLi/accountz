@@ -30,7 +30,7 @@ export class UsersService {
   findAll() {
     return this.prismaService.users.findMany({
       include: {
-        passwords: true,
+        accounts: true,
       },
     });
   }
@@ -40,7 +40,7 @@ export class UsersService {
       .findUniqueOrThrow({
         where: { id },
         include: {
-          passwords: true,
+          accounts: true,
         },
       })
       .catch(() => userNotExists());

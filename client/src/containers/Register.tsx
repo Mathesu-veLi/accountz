@@ -51,7 +51,7 @@ export function Register() {
   useEffect(() => {
     if (id) {
       toast('User already logged in');
-      navigate('/');
+      navigate('/dashboard');
     }
   });
 

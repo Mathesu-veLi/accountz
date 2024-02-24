@@ -1,6 +1,6 @@
 import { Inject, Injectable, Scope } from '@nestjs/common';
-import { CreatePasswordDto } from './dto/create-password.dto';
-import { UpdatePasswordDto } from './dto/update-password.dto';
+import { CreateAccountDto } from './dto/create-account.dto';
+import { UpdateAccountDto } from './dto/update-account.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { REQUEST } from '@nestjs/core';
 import { decode } from 'jsonwebtoken';
@@ -14,7 +14,7 @@ interface ITokenDecoded {
 }
 
 @Injectable({ scope: Scope.REQUEST })
-export class PasswordsService {
+export class AccountsService {
   constructor(
     @Inject(REQUEST) private readonly request: Request,
     private prismaService: PrismaService,
@@ -27,12 +27,12 @@ export class PasswordsService {
     return decoded.id;
   }
 
-  create(createPasswordDto: CreatePasswordDto) {
-    return this.prismaService.passwords
+  create(createAccountDto: CreateAccountDto) {
+    return this.prismaService.accounts
       .create({
         data: {
-          ...createPasswordDto,
-          password: JSON.stringify(encrypt(createPasswordDto.password)),
+          ...createAccountDto,
+          password: JSON.stringify(encrypt(createAccountDto.password)),
           userId: this.userId,
         },
       })
@@ -42,11 +42,11 @@ export class PasswordsService {
   }
 
   findAll() {
-    return this.prismaService.passwords.findMany();
+    return this.prismaService.accounts.findMany();
   }
 
   async findOne(id: number) {
-    const account = await this.prismaService.passwords
+    const account = await this.prismaService.accounts
       .findUniqueOrThrow({
         where: { id },
       })
@@ -61,18 +61,18 @@ export class PasswordsService {
     return account;
   }
 
-  update(id: number, updatePasswordDto: UpdatePasswordDto) {
-    return this.prismaService.passwords.update({
+  update(id: number, updateAccountDto: UpdateAccountDto) {
+    return this.prismaService.accounts.update({
       where: { id },
       data: {
-        ...updatePasswordDto,
-        password: JSON.stringify(encrypt(updatePasswordDto.password)),
+        ...updateAccountDto,
+        password: JSON.stringify(encrypt(updateAccountDto.password)),
       },
     });
   }
 
   remove(id: number) {
-    return this.prismaService.passwords.delete({
+    return this.prismaService.accounts.delete({
       where: { id },
     });
   }

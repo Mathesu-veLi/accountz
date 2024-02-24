@@ -9,9 +9,9 @@ export function Header() {
       <div className="flex justify-between w-11/12 py-4">
         <AccountDropdown />
         <h1 className="font-light">
-          <Link to="/">Password</Link>
+          <Link to="/dashboard">Password</Link>
         </h1>
-        <Link to="/password">
+        <Link to="/account">
           <Button variant="ghost">
             <PiPlusCircleLight className="w-7 h-7" />
           </Button>

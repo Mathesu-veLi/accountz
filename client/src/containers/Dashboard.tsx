@@ -1,14 +1,14 @@
-import { WebsitePasswordCard } from '@/components/WebsitePasswordCard';
+import { WebsiteAccountCard } from '@/components/WebsitePasswordCard';
 import { IAccount } from '@/interfaces/IAccount';
 import { api } from '@/lib/axios';
 import { useAccountStore } from '@/store/useAccountStore';
 import { useUserStore } from '@/store/useUserStore';
 import { useEffect, useState } from 'react';
 
-export function Home() {
+export function Dashboard() {
   const { id } = useUserStore().user;
   const { setAccounts: setStateAccounts } = useAccountStore();
-  const [globalPasswords, setGlobalPasswords] = useState<IAccount[]>([]);
+  const [globalAccounts, setGlobalAccounts] = useState<IAccount[]>([]);
   const [accounts, setAccounts] = useState<Record<string, IAccount[]>>();
   const [isLoading, setIsLoading] = useState(false);
   const accountsTemp: Record<string, IAccount[]> = {};
@@ -16,29 +16,27 @@ export function Home() {
   useEffect(() => {
     if (id) {
       setIsLoading(true);
-      api
-        .get(`users/${id}`)
-        .then((res: { data: { passwords: IAccount[] } }) => {
-          setIsLoading(false);
-          const accounts = res.data.passwords.map((website) => {
-            delete website.password;
-            return website;
-          });
-
-          setGlobalPasswords(accounts);
+      api.get(`users/${id}`).then((res: { data: { accounts: IAccount[] } }) => {
+        setIsLoading(false);
+        const accounts = res.data.accounts.map((website) => {
+          delete website.password;
+          return website;
         });
+
+        setGlobalAccounts(accounts);
+      });
     }
   }, [id]);
 
   useEffect(() => {
-    globalPasswords.forEach((pass) => {
-      if (!accountsTemp[pass.website])
-        return (accountsTemp[pass.website] = [pass]);
-      return accountsTemp[pass.website].push(pass);
+    globalAccounts.forEach((account) => {
+      if (!accountsTemp[account.website])
+        return (accountsTemp[account.website] = [account]);
+      return accountsTemp[account.website].push(account);
     });
     setStateAccounts(accountsTemp);
     setAccounts(accountsTemp);
-  }, [globalPasswords]);
+  }, [globalAccounts]);
 
   if (!accounts) return;
 
@@ -49,22 +47,22 @@ export function Home() {
       </div>
     );
 
-  return globalPasswords.length ? (
+  return globalAccounts.length ? (
     <div className="flex justify-center">
       <div className="w-11/12 lg:w-3/6 mx-10 flex flex-col gap-5">
-        {Object.entries(accounts).map(([website, passwords]) => (
-          <WebsitePasswordCard
+        {Object.entries(accounts).map(([website, accountsIterator]) => (
+          <WebsiteAccountCard
             key={website}
             website={website}
-            password={passwords[0]}
-            quantityOfPasswords={passwords.length}
+            firstAccount={accountsIterator[0]}
+            quantityOfAccounts={accountsIterator.length}
           />
         ))}
       </div>
     </div>
   ) : (
     <div className="flex justify-center items-center h-screen">
-      <h1 className="text-2xl font-light">No password registered</h1>
+      <h1 className="text-2xl font-light">No account registered</h1>
     </div>
   );
 }

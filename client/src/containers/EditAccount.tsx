@@ -29,7 +29,7 @@ const formSchema = z.object({
 
 type TFormSchema = z.infer<typeof formSchema>;
 
-export function Password() {
+export function EditAccount() {
   const navigate = useNavigate();
 
   const website = useParams().website as string;
@@ -40,22 +40,22 @@ export function Password() {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const websitePasswords = (accounts as Record<string, IAccount[]>)[website];
+  const websiteAccounts = (accounts as Record<string, IAccount[]>)[website];
 
   useEffect(() => {
-    if (!websitePasswords) {
+    if (!websiteAccounts) {
       toast.error('Website not registered');
-      return navigate('/');
+      return navigate('/dashboard');
     }
 
-    const actualAccount = websitePasswords[index];
+    const actualAccount = websiteAccounts[index];
 
     if (!actualAccount) {
       toast.error('Account not registered');
-      return navigate(`/password/${website}`);
+      return navigate(`/account/${website}`);
     }
     api
-      .get(`/passwords/${actualAccount.id}`, {
+      .get(`/accounts/${actualAccount.id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -65,7 +65,7 @@ export function Password() {
       });
 
     setAccount(actualAccount);
-  }, [index, navigate, token, website, websitePasswords]);
+  }, [index, navigate, token, website, websiteAccounts]);
 
   const form = useForm<TFormSchema>({
     resolver: zodResolver(formSchema),
@@ -81,9 +81,9 @@ export function Password() {
     },
   });
 
-  async function editPassword(newPasswordData: TFormSchema) {
+  async function editPasswordFromTheStore(newPasswordData: TFormSchema) {
     setIsLoading(true);
-    const accountAlreadyRegistered = websitePasswords.some(
+    const accountAlreadyRegistered = websiteAccounts.some(
       (passwordIterator) =>
         passwordIterator.email === newPasswordData.email &&
         passwordIterator.id !== account?.id,
@@ -96,7 +96,7 @@ export function Password() {
       return;
     }
 
-    const newPassword = {
+    const newAccountData = {
       website,
       websiteUrl: account?.websiteUrl,
       username: newPasswordData.username as string,
@@ -105,14 +105,14 @@ export function Password() {
     };
 
     await api
-      .patch(`/passwords/${account?.id}`, newPassword, {
+      .patch(`/accounts/${account?.id}`, newAccountData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then(() => {
-        toast.success('Password updated successfully');
-        navigate('/');
+        toast.success('Account updated successfully');
+        navigate('/dashboard');
       })
       .catch((e) => {
         console.log(e);
@@ -122,7 +122,7 @@ export function Password() {
     setIsLoading(false);
   }
 
-  async function deletePasswordOfTheStore() {
+  async function deleteAccountFromTheStore() {
     setIsLoading(true);
     const confirmDelete = window.confirm(
       'Are you sure you want to delete this password?',
@@ -131,14 +131,14 @@ export function Password() {
     if (!confirmDelete) return;
 
     await api
-      .delete(`/passwords/${account?.id}`, {
+      .delete(`/accounts/${account?.id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then(() => {
         toast.success('Password deleted successfully');
-        navigate('/');
+        navigate('/dashboard');
       })
       .catch((e) => toast.error(e.response.data.message));
     setIsLoading(false);
@@ -149,7 +149,7 @@ export function Password() {
       <Form {...form}>
         <form
           action=""
-          onSubmit={form.handleSubmit(editPassword)}
+          onSubmit={form.handleSubmit(editPasswordFromTheStore)}
           className="flex flex-col justify-between items-center gap-5 lg:[&_div]:w-full [&_div]:w-64 lg:scale-105 lg:p-5 w-2/6"
         >
           <h1 className="lg:text-xl font-semibold tracking-wider">{website}</h1>
@@ -202,7 +202,7 @@ export function Password() {
             {isLoading ? (
               <ButtonLoading />
             ) : (
-              <Button type="submit">Submit</Button>
+              <Button type="submit">Update account</Button>
             )}
 
             {isLoading ? (
@@ -212,7 +212,7 @@ export function Password() {
                 variant="destructive"
                 onClick={(e) => {
                   e.preventDefault();
-                  deletePasswordOfTheStore();
+                  deleteAccountFromTheStore();
                 }}
               >
                 Delete account

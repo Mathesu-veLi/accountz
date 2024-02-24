@@ -8,12 +8,12 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './modules/users/users.module';
 import { PrismaModule } from './prisma/prisma.module';
-import { PasswordsModule } from './modules/passwords/passwords.module';
+import { AccountsModule } from './modules/accounts/accounts.module';
 import { TokensModule } from './modules/tokens/tokens.module';
 import { LoginRequiredMiddleware } from './middlewares/loginRequired';
 
 @Module({
-  imports: [UsersModule, PrismaModule, PasswordsModule, TokensModule],
+  imports: [UsersModule, PrismaModule, AccountsModule, TokensModule],
   controllers: [AppController],
   providers: [AppService],
 })
@@ -24,8 +24,8 @@ export class AppModule implements NestModule {
       .forRoutes(
         { path: 'users/:id', method: RequestMethod.PATCH },
         { path: 'users/:id', method: RequestMethod.DELETE },
-        { path: 'passwords/', method: RequestMethod.ALL },
-        { path: 'passwords/:id', method: RequestMethod.ALL },
+        { path: 'accounts/', method: RequestMethod.ALL },
+        { path: 'accounts/:id', method: RequestMethod.ALL },
       );
   }
 }

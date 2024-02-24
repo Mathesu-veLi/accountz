@@ -20,7 +20,7 @@ export const useAccountStore = create<UserState>()(
       reset: () => set(initialState),
     }),
     {
-      name: 'passwords',
+      name: 'accounts',
       storage: createJSONStorage(() => localStorage),
     },
   ),

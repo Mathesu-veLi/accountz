@@ -3,30 +3,30 @@ import { Link } from 'react-router-dom';
 
 interface IProps {
   website: string;
-  password: IAccount;
-  quantityOfPasswords: number;
+  firstAccount: IAccount;
+  quantityOfAccounts: number;
 }
 
-export function WebsitePasswordCard(props: IProps) {
+export function WebsiteAccountCard(props: IProps) {
   return (
     <Link
-      to={`/password/${props.website}`}
+      to={`/account/${props.website}`}
       key={props.website}
       className="flex gap-5"
     >
       <div className="p-4 border rounded-sm w-16 h-16 flex justify-center items-center">
         <img
-          src={`https://${props.password.websiteUrl}/favicon.ico`}
+          src={`https://${props.firstAccount.websiteUrl}/favicon.ico`}
           className="w-full h-full"
         />
       </div>
       <div className="h-16">
         <h1 className="font-semibold tracking-wider">{props.website}</h1>
-        <p className="text-sm text-gray-400">{props.password.username}</p>
+        <p className="text-sm text-gray-400">{props.firstAccount.username}</p>
         <div className="flex justify-center items-center text-sm text-gray-400 gap-3">
-          <p>{props.password.email}</p>
-          {props.quantityOfPasswords > 1 && (
-            <span>+{props.quantityOfPasswords - 1}</span>
+          <p>{props.firstAccount.email}</p>
+          {props.quantityOfAccounts > 1 && (
+            <span>+{props.quantityOfAccounts - 1}</span>
           )}
         </div>
       </div>

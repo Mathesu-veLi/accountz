@@ -1,9 +1,15 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Home } from './containers/Home';
-import { Password } from './containers/Password';
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+  Redirect,
+  Navigate,
+} from 'react-router-dom';
+import { Dashboard } from './containers/Dashboard';
+import { EditAccount } from './containers/EditAccount';
 import { Header } from './components/Header';
-import { AddPassword } from './containers/AddPassword';
-import { WebsitePasswords } from './containers/WebsitePasswords';
+import { AddAccounts } from './containers/AddAccount';
+import { WebsiteAccounts } from './containers/WebsiteAccounts';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Register } from './containers/Register';
@@ -11,6 +17,10 @@ import { Login } from './containers/Login';
 
 function App() {
   const routes = [
+    {
+      path: '/dashboard',
+      element: <Dashboard />,
+    },
     {
       path: '/',
       element: <Navigate to="/dashboard" replace />,
@@ -20,16 +30,16 @@ function App() {
       element: <Register />,
     },
     {
-      path: '/password',
-      element: <AddPassword />,
+      path: '/account',
+      element: <AddAccounts />,
     },
     {
-      path: '/password/:website',
-      element: <WebsitePasswords />,
+      path: '/account/:website',
+      element: <WebsiteAccounts />,
     },
     {
-      path: '/password/:website/:index',
-      element: <Password />,
+      path: '/account/:website/:index',
+      element: <EditAccount />,
     },
     {
       path: '/login',

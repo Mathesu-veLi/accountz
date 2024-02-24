@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { useAccountStore } from '@/store/useAccountStore';
 import { IAccount } from '@/interfaces/IAccount';
 
-export function WebsitePasswords() {
+export function WebsiteAccounts() {
   const websiteParam = useParams().website as string;
   const { accounts } = useAccountStore();
   const websitePasswords = (accounts as Record<string, IAccount[]>)[
@@ -17,7 +17,7 @@ export function WebsitePasswords() {
   useEffect(() => {
     if (!websitePasswords || !websitePasswords.length) {
       toast.error('Website not registered');
-      return navigate('/');
+      return navigate('/dashboard');
     }
   });
 
@@ -28,7 +28,7 @@ export function WebsitePasswords() {
         {websitePasswords &&
           websitePasswords.map((password, index) => (
             <Link
-              to={`/password/${websiteParam}/${index}`}
+              to={`/account/${websiteParam}/${index}`}
               key={index}
               className="flex p-4 border rounded-sm justify-between items-center w-full gap-5"
             >

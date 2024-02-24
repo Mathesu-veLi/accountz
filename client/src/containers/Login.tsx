@@ -43,7 +43,7 @@ export function Login() {
   useEffect(() => {
     if (id) {
       toast('User already logged in');
-      navigate('/');
+      navigate('/dashboard');
     }
   }, []);
 
