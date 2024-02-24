@@ -5,7 +5,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { REQUEST } from '@nestjs/core';
 import { decode } from 'jsonwebtoken';
 import { Request } from 'express';
-import { accountAlreadyRegistered } from 'src/utils/throws';
+import { accountAlreadyRegistered, accountNotExists } from 'src/utils/throws';
 import { decrypt, encrypt } from 'src/utils/savedPasswordsUtils';
 
 interface ITokenDecoded {
@@ -45,14 +45,17 @@ export class PasswordsService {
     return this.prismaService.passwords.findMany();
   }
 
-  async findOne(id: number) {
-    const account = await this.prismaService.passwords.findUnique({
-      where: { id },
-    });
-
-    const encryptedPassword = JSON.parse(account.password);
-    const decryptedPassword = decrypt(encryptedPassword);
-    account.password = decryptedPassword;
+  findOne(id: number) {
+    const account = this.prismaService.passwords
+      .findUnique({
+        where: { id },
+      })
+      .then((account) => {
+        const encryptedPassword = JSON.parse(account.password);
+        const decryptedPassword = decrypt(encryptedPassword);
+        account.password = decryptedPassword;
+      })
+      .catch(() => accountNotExists());
 
     return account;
   }
