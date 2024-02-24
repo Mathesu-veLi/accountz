@@ -9,7 +9,7 @@ export function Header() {
       <div className="flex justify-between w-11/12 py-4">
         <AccountDropdown />
         <h1 className="font-light">
-          <Link to="/dashboard">Password</Link>
+          <Link to="/dashboard">Accountz</Link>
         </h1>
         <Link to="/account">
           <Button variant="ghost">

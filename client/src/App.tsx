@@ -1,10 +1,4 @@
-import {
-  BrowserRouter,
-  Route,
-  Routes,
-  Redirect,
-  Navigate,
-} from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import { Dashboard } from './containers/Dashboard';
 import { EditAccount } from './containers/EditAccount';
 import { Header } from './components/Header';
