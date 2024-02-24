@@ -8,7 +8,6 @@ interface IProps {
 }
 
 export function WebsitePasswordCard(props: IProps) {
-  console.log(`${props.password.websiteUrl}/favicon.ico`);
   return (
     <Link
       to={`/password/${props.website}`}
