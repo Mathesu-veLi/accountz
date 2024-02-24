@@ -16,7 +16,8 @@ import { api } from '@/lib/axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { useUserStore } from '@/store/useUserStore';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { ButtonLoading } from '@/components/ButtonLoading';
 
 const formSchema = z
   .object({
@@ -35,6 +36,7 @@ type TFormSchema = z.infer<typeof formSchema>;
 export function Register() {
   const { id } = useUserStore().user;
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<TFormSchema>({
     resolver: zodResolver(formSchema),
@@ -53,8 +55,9 @@ export function Register() {
     }
   });
 
-  function registerUser(form: TFormSchema) {
-    api
+  async function registerUser(form: TFormSchema) {
+    setIsLoading(true);
+    await api
       .post('/users', {
         name: form.username,
         email: form.email,
@@ -67,6 +70,7 @@ export function Register() {
       .catch((err) => {
         toast.error(err.response.data.message);
       });
+    setIsLoading(false);
   }
 
   return (
@@ -133,7 +137,11 @@ export function Register() {
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            {isLoading ? (
+              <ButtonLoading />
+            ) : (
+              <Button type="submit">Submit</Button>
+            )}
           </form>
         </Form>
       </div>

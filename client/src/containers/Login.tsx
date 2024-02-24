@@ -16,7 +16,8 @@ import { useNavigate } from 'react-router-dom';
 import { api } from '@/lib/axios';
 import { toast } from 'react-toastify';
 import { useUserStore } from '@/store/useUserStore';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { ButtonLoading } from '@/components/ButtonLoading';
 
 const formSchema = z.object({
   email: z.string().min(1).email('Email not valid'),
@@ -28,6 +29,7 @@ type TFormSchema = z.infer<typeof formSchema>;
 export function Login() {
   const { setUser, setToken } = useUserStore();
   const { id } = useUserStore().user;
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const form = useForm<TFormSchema>({
@@ -45,8 +47,9 @@ export function Login() {
     }
   }, []);
 
-  function loginUser(form: TFormSchema) {
-    api
+  async function loginUser(form: TFormSchema) {
+    setIsLoading(true);
+    await api
       .post('/tokens', {
         email: form.email,
         password: form.password,
@@ -61,6 +64,7 @@ export function Login() {
       .catch((err) => {
         toast.error(err.response.data.message);
       });
+    setIsLoading(false);
   }
 
   return (
@@ -100,7 +104,12 @@ export function Login() {
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+
+            {isLoading ? (
+              <ButtonLoading />
+            ) : (
+              <Button type="submit">Submit</Button>
+            )}
           </form>
         </Form>
       </div>
