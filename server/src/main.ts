@@ -7,7 +7,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors({
-    origin: process.env.CLIENT_URL,
+    origin: 'https://accountz.vercel.app',
     credentials: true,
   });
   await app.listen(3110);
