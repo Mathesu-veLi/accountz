@@ -45,15 +45,16 @@ export class PasswordsService {
     return this.prismaService.passwords.findMany();
   }
 
-  findOne(id: number) {
-    const account = this.prismaService.passwords
-      .findUnique({
+  async findOne(id: number) {
+    const account = await this.prismaService.passwords
+      .findUniqueOrThrow({
         where: { id },
       })
       .then((account) => {
         const encryptedPassword = JSON.parse(account.password);
         const decryptedPassword = decrypt(encryptedPassword);
         account.password = decryptedPassword;
+        return account;
       })
       .catch(() => accountNotExists());
 
