@@ -13,7 +13,7 @@ function App() {
   const routes = [
     {
       path: '/',
-      element: <Home />,
+      element: <Navigate to="/dashboard" replace />,
     },
     {
       path: '/register',
