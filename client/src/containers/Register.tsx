@@ -60,7 +60,7 @@ export function Register() {
     await api
       .post('/users', {
         name: form.username,
-        email: form.email,
+        email: form.email.toLowerCase(),
         password: form.password,
       })
       .then(() => {

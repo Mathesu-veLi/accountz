@@ -51,7 +51,7 @@ export function Login() {
     setIsLoading(true);
     await api
       .post('/tokens', {
-        email: form.email,
+        email: form.email.toLowerCase(),
         password: form.password,
       })
       .then((res) => {
