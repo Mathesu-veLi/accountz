@@ -10,13 +10,17 @@ export function Home() {
   const { setAccounts: setStateAccounts } = useAccountStore();
   const [globalPasswords, setGlobalPasswords] = useState<IAccount[]>([]);
   const [accounts, setAccounts] = useState<Record<string, IAccount[]>>();
+  const [isLoading, setIsLoading] = useState(false);
   const accountsTemp: Record<string, IAccount[]> = {};
 
   useEffect(() => {
-    if (id)
+    if (id) {
+      setIsLoading(true);
       api.get(`users/${id}`).then((res) => {
+        setIsLoading(false);
         setGlobalPasswords(res.data.passwords);
       });
+    }
   }, [id]);
 
   useEffect(() => {
@@ -30,6 +34,13 @@ export function Home() {
   }, [globalPasswords]);
 
   if (!accounts) return;
+
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <h1 className="text-2xl font-light">Loading...</h1>
+      </div>
+    );
 
   return globalPasswords.length ? (
     <div className="flex justify-center">
