@@ -1,3 +1,4 @@
+import { ButtonLoading } from '@/components/ButtonLoading';
 import { PasswordInput } from '@/components/PasswordInput';
 import { Button } from '@/components/ui/button';
 import {
@@ -36,6 +37,7 @@ export function Password() {
   const { accounts } = useAccountStore();
   const { token } = useUserStore();
   const [password, setPassword] = useState<IAccount>();
+  const [isLoading, setIsLoading] = useState(false);
 
   const websitePasswords = (accounts as Record<string, IAccount[]>)[website];
 
@@ -68,7 +70,8 @@ export function Password() {
     },
   });
 
-  function editPassword(newPasswordData: TFormSchema) {
+  async function editPassword(newPasswordData: TFormSchema) {
+    setIsLoading(true);
     const accountAlreadyRegistered = websitePasswords.some(
       (passwordIterator) =>
         passwordIterator.email === newPasswordData.email &&
@@ -90,7 +93,7 @@ export function Password() {
       password: newPasswordData.password,
     };
 
-    api
+    await api
       .patch(`/passwords/${password?.id}`, newPassword, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -104,16 +107,19 @@ export function Password() {
         console.log(e);
         toast.error(e.response.data.message);
       });
+
+    setIsLoading(false);
   }
 
-  function deletePasswordOfTheStore() {
+  async function deletePasswordOfTheStore() {
+    setIsLoading(true);
     const confirmDelete = window.confirm(
       'Are you sure you want to delete this password?',
     );
 
     if (!confirmDelete) return;
 
-    api
+    await api
       .delete(`/passwords/${password?.id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -124,6 +130,7 @@ export function Password() {
         navigate('/');
       })
       .catch((e) => toast.error(e.response.data.message));
+    setIsLoading(false);
   }
 
   return (
@@ -181,16 +188,25 @@ export function Password() {
             )}
           />
           <div className="flex justify-between items-center w-full lg:justify-around">
-            <Button type="submit">Submit</Button>
-            <Button
-              variant="destructive"
-              onClick={(e) => {
-                e.preventDefault();
-                deletePasswordOfTheStore();
-              }}
-            >
-              Delete account
-            </Button>
+            {isLoading ? (
+              <ButtonLoading />
+            ) : (
+              <Button type="submit">Submit</Button>
+            )}
+
+            {isLoading ? (
+              <ButtonLoading />
+            ) : (
+              <Button
+                variant="destructive"
+                onClick={(e) => {
+                  e.preventDefault();
+                  deletePasswordOfTheStore();
+                }}
+              >
+                Delete account
+              </Button>
+            )}
           </div>
         </form>
       </Form>

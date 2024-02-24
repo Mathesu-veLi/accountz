@@ -14,9 +14,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { PasswordInput } from '@/components/PasswordInput';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useUserStore } from '@/store/useUserStore';
 import { api } from '@/lib/axios';
+import { ButtonLoading } from '@/components/ButtonLoading';
 
 const formSchema = z.object({
   website: z.string().min(1),
@@ -30,7 +31,6 @@ type TFormSchema = z.infer<typeof formSchema>;
 
 export function AddPassword() {
   const { id } = useUserStore().user;
-
   const form = useForm<TFormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -44,6 +44,7 @@ export function AddPassword() {
 
   const { token } = useUserStore();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (!id) {
@@ -52,8 +53,9 @@ export function AddPassword() {
     }
   }, [id, navigate]);
 
-  function addPasswordToStore(password: TFormSchema) {
-    api
+  async function addPasswordToStore(password: TFormSchema) {
+    setIsLoading(true);
+    await api
       .post(
         '/passwords',
         {
@@ -73,10 +75,8 @@ export function AddPassword() {
         toast.success('Password saved successfully');
         navigate('/');
       })
-      .catch((e) => {
-        console.log(e);
-        toast.error(e.response.data.message);
-      });
+      .catch((e) => toast.error(e.response.data.message));
+    setIsLoading(false);
   }
 
   return (
@@ -160,7 +160,11 @@ export function AddPassword() {
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            {isLoading ? (
+              <ButtonLoading />
+            ) : (
+              <Button type="submit">Submit</Button>
+            )}
           </form>
         </Form>
       </div>
