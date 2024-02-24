@@ -59,7 +59,7 @@ export function Login() {
         setToken(res.data.token);
 
         toast.success('Successfully logged in');
-        navigate('/');
+        navigate(-1);
       })
       .catch((err) => {
         toast.error(err.response.data.message);
