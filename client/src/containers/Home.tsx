@@ -8,45 +8,46 @@ import { useEffect, useState } from 'react';
 export function Home() {
   const { id } = useUserStore().user;
   const { setAccounts: setStateAccounts } = useAccountStore();
-  const [passwords, setPasswords] = useState<IAccount[]>([]);
+  const [globalPasswords, setGlobalPasswords] = useState<IAccount[]>([]);
   const [accounts, setAccounts] = useState<Record<string, IAccount[]>>();
+  const accountsTemp: Record<string, IAccount[]> = {};
 
   useEffect(() => {
-    api.get(`users/${id}`).then((res) => {
-      setPasswords(res.data.passwords);
-    });
+    if (id)
+      api.get(`users/${id}`).then((res) => {
+        setGlobalPasswords(res.data.passwords);
+      });
   }, [id]);
 
   useEffect(() => {
-    const accounts: Record<string, IAccount[]> = {};
-    passwords.forEach((pass) => {
-      if (!accounts[pass.website]) return (accounts[pass.website] = [pass]);
-      return accounts[pass.website].push(pass);
+    if (!globalPasswords.length) return;
+    globalPasswords.forEach((pass) => {
+      if (!accountsTemp[pass.website])
+        return (accountsTemp[pass.website] = [pass]);
+      return accountsTemp[pass.website].push(pass);
     });
-    setStateAccounts(accounts);
-    setAccounts(accounts);
-  }, [passwords, setAccounts, setStateAccounts]);
-
-  if (!passwords.length)
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <h1 className="text-2xl font-light">No password registered</h1>
-      </div>
-    );
+    setStateAccounts(accountsTemp);
+    setAccounts(accountsTemp);
+  }, [globalPasswords]);
 
   if (!accounts) return;
 
-  return (
+  return globalPasswords.length ? (
     <div className="flex justify-center">
       <div className="w-11/12 lg:w-3/6 mx-10 flex flex-col gap-5">
         {Object.entries(accounts).map(([website, passwords]) => (
           <WebsitePasswordCard
+            key={website}
             website={website}
             password={passwords[0]}
             quantityOfPasswords={passwords.length}
           />
         ))}
       </div>
+    </div>
+  ) : (
+    <div className="flex justify-center items-center h-screen">
+      <h1 className="text-2xl font-light">No password registered</h1>
     </div>
   );
 }
