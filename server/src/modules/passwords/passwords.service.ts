@@ -6,6 +6,7 @@ import { REQUEST } from '@nestjs/core';
 import { decode } from 'jsonwebtoken';
 import { Request } from 'express';
 import { accountAlreadyRegistered } from 'src/utils/throws';
+import { decrypt, encrypt } from 'src/utils/savedPasswordsUtils';
 
 interface ITokenDecoded {
   id: number;
@@ -27,10 +28,13 @@ export class PasswordsService {
   }
 
   create(createPasswordDto: CreatePasswordDto) {
-    //TODO: encrypt password
     return this.prismaService.passwords
       .create({
-        data: { ...createPasswordDto, userId: this.userId },
+        data: {
+          ...createPasswordDto,
+          password: JSON.stringify(encrypt(createPasswordDto.password)),
+          userId: this.userId,
+        },
       })
       .catch((e) => {
         if (e.code === 'P2002') accountAlreadyRegistered();
@@ -41,16 +45,25 @@ export class PasswordsService {
     return this.prismaService.passwords.findMany();
   }
 
-  findOne(id: number) {
-    return this.prismaService.passwords.findUnique({
+  async findOne(id: number) {
+    const account = await this.prismaService.passwords.findUnique({
       where: { id },
     });
+
+    const encryptedPassword = JSON.parse(account.password);
+    const decryptedPassword = decrypt(encryptedPassword);
+    account.password = decryptedPassword;
+
+    return account;
   }
 
   update(id: number, updatePasswordDto: UpdatePasswordDto) {
     return this.prismaService.passwords.update({
       where: { id },
-      data: updatePasswordDto,
+      data: {
+        ...updatePasswordDto,
+        password: JSON.stringify(encrypt(updatePasswordDto.password)),
+      },
     });
   }
 
