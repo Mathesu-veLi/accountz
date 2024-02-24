@@ -43,7 +43,7 @@ export function Login() {
       toast('User already logged in');
       navigate('/');
     }
-  });
+  }, []);
 
   function loginUser(form: TFormSchema) {
     api
