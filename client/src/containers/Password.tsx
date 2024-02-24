@@ -124,8 +124,6 @@ export function Password() {
         navigate('/');
       })
       .catch((e) => toast.error(e.response.data.message));
-    toast.success('Password deleted successfully');
-    navigate('/');
   }
 
   return (
