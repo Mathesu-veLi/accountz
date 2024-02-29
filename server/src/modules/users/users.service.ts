@@ -49,6 +49,7 @@ export class UsersService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
+  	//FIXME: create a hash of the password on update
     await this.prismaService.users
       .findUniqueOrThrow({
         where: { id },
