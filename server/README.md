@@ -1,5 +1,7 @@
+# Accountz (Back-end)
 
 ## API Reference
+
 
 ### User
 
@@ -184,3 +186,17 @@
 | Response        | Description        |
 | :-------------- | :----------------- |
 | `404 Not Found` | Account not exists |
+
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your .env
+
+`DATABASE_URL`: URL to connect to the database
+
+`TOKEN_SECRET`: Key for creating user token
+
+`TOKEN_EXPIRATION`: Token expiration time (e.g.: "4d")
+
+`ENCRYPTION_KEY`: Password encryption key for users' saved accounts
+
+`CLIENT_URL`: Front-end URL
