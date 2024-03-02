@@ -1,73 +1,186 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## API Reference
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+### User
 
-## Description
+#### Create user
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
-```bash
-$ pnpm install
+```http
+  POST /users
 ```
 
-## Running the app
+| Parameter | Type     | Description             |
+| :-------- | :------- | :---------------------- |
+| `body`    | `object` | **Required**. User data |
 
-```bash
-# development
-$ pnpm run start
 
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+```typescript
+{
+    "name": string,
+    "email": string,
+    "password": string
+}
 ```
 
-## Test
 
-```bash
-# unit tests
-$ pnpm run test
+| Response  |  Description                                                                                                        |
+| :------------------- | :------------------------------------------------------------------ |
+| `400 Bad Request` | Your body doesn't meet the requirements *(see message array)* |
+| `409 Conflict`    | User already registered                                                                           |
 
-# e2e tests
-$ pnpm run test:e2e
+#### Get all users
 
-# test coverage
-$ pnpm run test:cov
+```http
+  GET /users
 ```
 
-## Support
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+#### Get user
 
-## Stay in touch
+```http
+  GET /users/${id}
+```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`      | `string` | **Required**. Id of user to fetch |
 
-## License
+| Response        | Description     |
+| :-------------- | :-------------- |
+| `404 Not Found` | User not exists |
 
-Nest is [MIT licensed](LICENSE).
+#### Update user
+
+```http
+  PATCH /users/${id}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`      | `string` | **Required**. Id of user to fetch |
+
+| Response           | Description                             |
+| :----------------- | :-------------------------------------- |
+| `404 Not Found`    | User not exists                         |
+| `401 Unauthorized` | Unauthorized route due to lack of token |
+
+
+#### Delete user
+
+```http
+  DELETE /users/${id}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`      | `string` | **Required**. Id of user to fetch |
+
+
+| Response           | Description                             |
+| :----------------- | :-------------------------------------- |
+| `404 Not Found`    | User not exists                         |
+| `401 Unauthorized` | Unauthorized route due to lack of token |
+
+### Token
+
+#### Create Token
+
+```http
+  POST /token
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `body`    | `object` | **Required**. User data |
+
+```typescript
+{
+    "email": string,
+    "password": string
+}
+```
+
+| Response  |  Description                                                                                                        |
+| :------------------- | :------------------------------------------------------------------ |
+| `400 Bad Request` | Your body doesn't meet the requirements *(see message array)* |
+| `404 Not Found`    | User not exists                         |
+| `401 Unauthorized` | Incorrect password |
+
+
+### Account
+
+#### Save account
+
+```http
+  POST /accounts
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `body`    | `object` | **Required**. Account data |
+
+
+```typescript
+{
+    "website": string,
+    "websiteUrl": string,
+    "username": string,
+    "email": string,
+    "password": string
+}
+```
+
+
+| Response          | Description                |
+| :---------------- | :------------------------- |
+| `409 Conflict`    | Account already registered |
+
+#### Get all accounts
+
+```http
+  GET /accounts
+```
+
+
+#### Get account
+
+```http
+  GET /accounts/${id}
+```
+
+| Parameter | Type     | Description                          |
+| :-------- | :------- | :----------------------------------- |
+| `id`      | `string` | **Required**. Id of account to fetch |
+
+| Response        | Description        |
+| :-------------- | :----------------- |
+| `404 Not Found` | Account not exists |
+
+#### Update account
+
+```http
+  PATCH /accounts/${id}
+```
+
+| Parameter | Type     | Description                          |
+| :-------- | :------- | :----------------------------------- |
+| `id`      | `string` | **Required**. Id of account to fetch |
+
+| Response        | Description        |
+| :-------------- | :----------------- |
+| `404 Not Found` | Account not exists |
+
+
+#### Delete account
+
+```http
+  DELETE /accounts/${id}
+```
+
+| Parameter | Type     | Description                          |
+| :-------- | :------- | :----------------------------------- |
+| `id`      | `string` | **Required**. Id of account to fetch |
+
+| Response        | Description        |
+| :-------------- | :----------------- |
+| `404 Not Found` | Account not exists |

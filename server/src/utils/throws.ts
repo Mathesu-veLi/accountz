@@ -17,5 +17,5 @@ export function accountAlreadyRegistered() {
 }
 
 export function accountNotExists() {
-  throw new HttpException('Password not exists', HttpStatus.NOT_FOUND);
+  throw new HttpException('Account not exists', HttpStatus.NOT_FOUND);
 }
