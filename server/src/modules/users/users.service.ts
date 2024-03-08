@@ -49,7 +49,8 @@ export class UsersService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-  	//FIXME: create a hash of the password on update
+  	const passwordHash = generatePasswordHash(updateUserDto.password);
+    
     await this.prismaService.users
       .findUniqueOrThrow({
         where: { id },
@@ -58,7 +59,7 @@ export class UsersService {
 
     return this.prismaService.users.update({
       where: { id },
-      data: updateUserDto,
+      data: {...updateUserDto, password: passwordHash},
     });
   }
 
