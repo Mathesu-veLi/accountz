@@ -18,6 +18,9 @@ import { useEffect, useState } from 'react';
 import { useUserStore } from '@/store/useUserStore';
 import { api } from '@/lib/axios';
 import { ButtonLoading } from '@/components/ButtonLoading';
+import { GearIcon } from '@radix-ui/react-icons';
+import { Dialog, DialogTrigger, DialogContent } from '@/components/ui/dialog';
+import { PasswordGenerator } from '@/components/PasswordGenerator';
 
 const formSchema = z.object({
   website: z.string().min(1),
@@ -154,7 +157,20 @@ export function AddAccounts() {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <PasswordInput placeholder="password" {...field} />
+                    <div className="flex justify-center items-center gap-3">
+                      <PasswordInput placeholder="password" {...field} />
+
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button variant="ghost" type="button">
+                            <GearIcon />
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[425px]">
+                          <PasswordGenerator />
+                        </DialogContent>
+                      </Dialog>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
