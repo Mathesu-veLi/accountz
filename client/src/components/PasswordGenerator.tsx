@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 import { generateRandomInt } from '@/lib/utils';
 import { Slider } from './ui/slider';
 import { ToggleGroup, ToggleGroupItem } from './ui/toggle-group';
-import { CopyIcon } from '@radix-ui/react-icons';
+import { CheckIcon, CopyIcon } from '@radix-ui/react-icons';
 
 type IOptions = 'lower' | 'upper' | 'number' | 'symbol';
 
@@ -22,6 +22,7 @@ export function PasswordGenerator(props: IProps) {
   const [password, setPassword] = useState<string>('passwoRd123!');
   const [passwordSize, setPasswordSize] = useState<number>(10);
   const [passwordOptions, setPasswordOptions] = useState<IOptions[]>(['lower']);
+  const [copied, setCopied] = useState(false);
 
   function generatePassword() {
     let tempPassword = '';
@@ -72,8 +73,15 @@ export function PasswordGenerator(props: IProps) {
           className="text-lg max-w-80 break-words font-mono text-center border-0"
           value={password}
         />
-        <Button variant="ghost" type="button" onClick={(() => navigator.clipboard.writeText(password))}>
-          <CopyIcon />
+        <Button
+          variant="ghost"
+          type="button"
+          onClick={() => {
+            navigator.clipboard.writeText(password);
+            setCopied(true);
+          }}
+        >
+          {copied ? <CheckIcon /> : <CopyIcon />}
         </Button>
       </div>
       <div className="grid gap-7">
