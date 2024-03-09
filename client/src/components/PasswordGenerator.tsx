@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { generateRandomInt } from '@/lib/utils';
 import { Slider } from './ui/slider';
 import { ToggleGroup, ToggleGroupItem } from './ui/toggle-group';
+import { CopyIcon } from '@radix-ui/react-icons';
 
 type IOptions = 'lower' | 'upper' | 'number' | 'symbol';
 
@@ -71,6 +72,9 @@ export function PasswordGenerator(props: IProps) {
           className="text-lg max-w-80 break-words font-mono text-center border-0"
           value={password}
         />
+        <Button variant="ghost" type="button" onClick={(() => navigator.clipboard.writeText(password))}>
+          <CopyIcon />
+        </Button>
       </div>
       <div className="grid gap-7">
         <div className="flex flex-col justify-center items-center gap-4">
