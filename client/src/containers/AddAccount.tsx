@@ -18,6 +18,9 @@ import { useEffect, useState } from 'react';
 import { useUserStore } from '@/store/useUserStore';
 import { api } from '@/lib/axios';
 import { ButtonLoading } from '@/components/ButtonLoading';
+import { GearIcon } from '@radix-ui/react-icons';
+import { Dialog, DialogTrigger, DialogContent } from '@/components/ui/dialog';
+import { PasswordGenerator } from '@/components/PasswordGenerator';
 
 const formSchema = z.object({
   website: z.string().min(1),
@@ -30,7 +33,8 @@ const formSchema = z.object({
 type TFormSchema = z.infer<typeof formSchema>;
 
 export function AddAccounts() {
-  const { id } = useUserStore().user;
+  const [password, setPassword] = useState('');
+
   const form = useForm<TFormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -40,8 +44,16 @@ export function AddAccounts() {
       email: '',
       password: '',
     },
+    values: {
+      website: '',
+      websiteUrl: '',
+      username: '',
+      email: '',
+      password,
+    },
   });
 
+  const { id } = useUserStore().user;
   const { token } = useUserStore();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -154,7 +166,20 @@ export function AddAccounts() {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <PasswordInput placeholder="password" {...field} />
+                    <div className="flex justify-center items-center gap-3">
+                      <PasswordInput placeholder="password" {...field} />
+
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button variant="ghost" type="button">
+                            <GearIcon />
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <PasswordGenerator setFormPassword={setPassword} />
+                        </DialogContent>
+                      </Dialog>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
