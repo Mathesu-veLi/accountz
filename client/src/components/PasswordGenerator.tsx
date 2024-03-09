@@ -62,10 +62,11 @@ export function PasswordGenerator() {
           Generate a strong password with letters, numbers and symbols
         </DialogDescription>
       </DialogHeader>
-      <div className="flex justify-center">
-        <span className="text-lg max-w-80 break-words font-mono text-center">
-          {password}
-        </span>
+      <div className="flex justify-center items-center gap-5">
+        <Input
+          className="text-lg max-w-80 break-words font-mono text-center border-0"
+          value={password}
+        />
       </div>
       <div className="grid gap-7">
         <div className="flex flex-col justify-center items-center gap-4">
