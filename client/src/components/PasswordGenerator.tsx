@@ -131,7 +131,7 @@ export function PasswordGenerator(props: IProps) {
       <div className="flex justify-center mt-4">
         <DialogClose asChild>
           <Button type="submit" onClick={() => props.setFormPassword(password)}>
-            Save changes
+            Use the generated password
           </Button>
         </DialogClose>
       </div>
