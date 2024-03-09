@@ -1,8 +1,8 @@
 import {
   DialogHeader,
-  DialogFooter,
   DialogTitle,
   DialogDescription,
+  DialogClose,
 } from './ui/dialog';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
@@ -13,7 +13,11 @@ import { ToggleGroup, ToggleGroupItem } from './ui/toggle-group';
 
 type IOptions = 'lower' | 'upper' | 'number' | 'symbol';
 
-export function PasswordGenerator() {
+interface IProps {
+  setFormPassword: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export function PasswordGenerator(props: IProps) {
   const [password, setPassword] = useState<string>('passwoRd123!');
   const [passwordSize, setPasswordSize] = useState<number>(10);
   const [passwordOptions, setPasswordOptions] = useState<IOptions[]>(['lower']);
@@ -62,7 +66,7 @@ export function PasswordGenerator() {
           Generate a strong password with letters, numbers and symbols
         </DialogDescription>
       </DialogHeader>
-      <div className="flex justify-center items-center gap-5">
+      <div className="flex justify-center items-center gap-7">
         <Input
           className="text-lg max-w-80 break-words font-mono text-center border-0"
           value={password}
@@ -111,9 +115,14 @@ export function PasswordGenerator() {
           </ToggleGroupItem>
         </ToggleGroup>
       </div>
-      <DialogFooter>
-        <Button type="submit">Save changes</Button>
-      </DialogFooter>
+
+      <div className="flex justify-center mt-4">
+        <DialogClose asChild>
+          <Button type="submit" onClick={() => props.setFormPassword(password)}>
+            Save changes
+          </Button>
+        </DialogClose>
+      </div>
     </>
   );
 }

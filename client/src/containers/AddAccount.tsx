@@ -33,7 +33,8 @@ const formSchema = z.object({
 type TFormSchema = z.infer<typeof formSchema>;
 
 export function AddAccounts() {
-  const { id } = useUserStore().user;
+  const [password, setPassword] = useState('');
+
   const form = useForm<TFormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -43,8 +44,16 @@ export function AddAccounts() {
       email: '',
       password: '',
     },
+    values: {
+      website: '',
+      websiteUrl: '',
+      username: '',
+      email: '',
+      password,
+    },
   });
 
+  const { id } = useUserStore().user;
   const { token } = useUserStore();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -166,8 +175,8 @@ export function AddAccounts() {
                             <GearIcon />
                           </Button>
                         </DialogTrigger>
-                        <DialogContent className="sm:max-w-[425px]">
-                          <PasswordGenerator />
+                        <DialogContent>
+                          <PasswordGenerator setFormPassword={setPassword} />
                         </DialogContent>
                       </Dialog>
                     </div>
