@@ -18,7 +18,7 @@ function App() {
     },
     {
       path: '/',
-      element: <Navigate to="/dashboard" replace />,
+      element: <Navigate to="/dashboard" />,
     },
     {
       path: '/register',
