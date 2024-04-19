@@ -49,8 +49,8 @@ export class UsersService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-  	const passwordHash = generatePasswordHash(updateUserDto.password);
-    
+    const passwordHash = generatePasswordHash(updateUserDto.password);
+
     await this.prismaService.users
       .findUniqueOrThrow({
         where: { id },
@@ -59,7 +59,7 @@ export class UsersService {
 
     return this.prismaService.users.update({
       where: { id },
-      data: {...updateUserDto, password: passwordHash},
+      data: { ...updateUserDto, password: passwordHash },
     });
   }
 

@@ -2,6 +2,7 @@
   "name": "accountz",
   "version": "1.0.0",
   "type": "module",
+  "homepage": "https://accountz.vercel.app/dashboard",
   "scripts": {
     "dev": "vite --host",
     "build": "tsc && vite build",
