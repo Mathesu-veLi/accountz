@@ -1,120 +1,111 @@
-# 🚀 Accountz
+# 🚀 Accountz  
 
-Accountz é uma aplicação full-stack para gerenciamento de contas e senhas, composta por uma interface moderna (frontend) e um backend robusto em NestJS. A aplicação permite registrar usuários, fazer login, gerenciar contas de websites, e gerar senhas seguras. 🔐
+Accountz is a full-stack application for managing accounts and passwords, featuring a modern frontend and a robust NestJS backend. It allows user registration, login, account management, and secure password generation. 🔐  
 
-## 📜 Sumário
+## 📜 Table of Contents  
 
-- [✨ Recursos](#-recursos)  
-- [🛠 Tecnologias](#-tecnologias)  
-- [📥 Instalação](#-instalação)  
-  - [⚙ Requisitos](#-requisitos)  
-  - [📑 Configuração do Ambiente](#-configuração-do-ambiente)  
-- [▶️ Rodando o Projeto](#-rodando-o-projeto)  
+- [✨ Features](#-features)  
+- [🛠 Technologies](#-technologies)  
+- [📥 Installation](#-installation)  
+  - [⚙ Requirements](#-requirements)  
+  - [📑 Environment Setup](#-environment-setup)  
+- [▶️ Running the Project](#-running-the-project)  
   - [🎨 Frontend](#-frontend)  
   - [🖥 Backend](#-backend)  
-- [📂 Estrutura do Projeto](#-estrutura-do-projeto)  
-- [☁️ Deploy](#-deploy)  
+- [📂 Project Structure](#-project-structure)  
+- [☁️ Deployment](#-deployment)  
 
-## ✨ Recursos
+## ✨ Features  
 
-✅ **Cadastro e Autenticação de Usuários:** Registro, login e gerenciamento de sessão.  
-✅ **Gerenciamento de Contas:** Adição, edição e exclusão de contas vinculadas a websites.  
-✅ **Geração de Senhas Seguras:** Ferramenta integrada para criação de senhas fortes.  
-✅ **Interface Responsiva:** Design moderno com componentes reutilizáveis e integração com Tailwind CSS.  
-✅ **Backend Robustecido:** API RESTful construída com NestJS, utilizando Prisma para gerenciamento do banco de dados.  
+✅ **User Registration & Authentication:** Sign-up, login, and session management.  
+✅ **Account Management:** Add, edit, and delete website-linked accounts.  
+✅ **Secure Password Generation:** Built-in tool for generating strong passwords.  
+✅ **Responsive Interface:** Modern design with reusable components and Tailwind CSS integration.  
+✅ **Robust Backend:** RESTful API built with NestJS, using Prisma for database management.  
 
-## 🛠 Tecnologias
+## 🛠 Technologies  
 
 ### 🎨 **Frontend:**  
 - ⚡ React + TypeScript  
 - ⚡ Vite  
 - 🎨 Tailwind CSS  
-- 🧹 ESLint & Prettier para padronização de código  
+- 🧹 ESLint & Prettier for code standardization  
 
 ### 🖥 **Backend:**  
 - 🚀 NestJS  
 - 🗄 Prisma ORM  
-- 🐳 Docker Compose (configuração disponível)  
+- 🐳 Docker Compose (available configuration)  
 
-## 📥 Instalação
+## 📥 Installation  
 
-### ⚙ Requisitos
+### ⚙ Requirements  
 
-- 🟢 Node.js (versão recomendada LTS)  
-- 📦 PNPM ou NPM  
-- 🗃 Banco de dados (PostgreSQL, MySQL ou SQLite via Prisma)  
-- 🐳 Docker (opcional, para rodar a stack via docker-compose)  
+- 🟢 Node.js (recommended LTS version)  
+- 📦 PNPM or NPM  
+- 🗃 Database (PostgreSQL, MySQL, or SQLite via Prisma)  
+- 🐳 Docker (optional, for running the stack via docker-compose)  
 
-### 📑 Configuração do Ambiente
+### 📑 Environment Setup  
 
-1. Clone o repositório:  
+1. Clone the repository:  
    ```bash
-   git clone https://seu-repositorio-url.git
+   git clone https://your-repo-url.git
    cd accountz-main
    ```
+2. Create environment files:  
+   - 🖥 **Frontend:** Create a `.env` file in the `client/` folder following the provided example.  
+   - 🗄 **Backend:** Configure the necessary environment variables for Prisma and NestJS (`.env` in the backend root).  
 
-2. Crie os arquivos de ambiente:  
-   - 🖥 **Frontend:** Crie um arquivo `.env` na pasta `client/` conforme o exemplo fornecido.  
-   - 🗄 **Backend:** Configure as variáveis de ambiente necessárias para Prisma e NestJS (`.env` na raiz do backend).  
+## ▶️ Running the Project  
 
-## ▶️ Rodando o Projeto
+### 🎨 Frontend  
 
-### 🎨 Frontend
-
-1. Acesse a pasta `client/`:  
+1. Navigate to the `client/` folder:  
    ```bash
    cd client
-   ```
-
-2. Instale as dependências:  
+   ```  
+2. Install dependencies:  
    ```bash
    pnpm install
-   ```
-
-3. Inicie a aplicação:  
+   ```  
+3. Start the application:  
    ```bash
    pnpm run dev
-   ```
+   ```  
+💡 The frontend will be available at [http://localhost:3000](http://localhost:3000) or as defined in Vite.  
 
-💡 O frontend estará disponível em [http://localhost:3000](http://localhost:3000) ou conforme definido no Vite.
+### 🖥 Backend  
 
-### 🖥 Backend
-
-1. Acesse a pasta `server/`:  
+1. Navigate to the `server/` folder:  
    ```bash
    cd server
-   ```
-
-2. Instale as dependências:  
+   ```  
+2. Install dependencies:  
    ```bash
    pnpm install
-   ```
-
-3. Configure o banco de dados e execute as migrações com Prisma:  
+   ```  
+3. Configure the database and apply migrations with Prisma:  
    ```bash
    pnpm prisma migrate dev
-   ```
-
-4. Inicie o backend:  
+   ```  
+4. Start the backend:  
    ```bash
    pnpm run start:dev
-   ```
+   ```  
+🔗 The backend will be available at [http://localhost:3001](http://localhost:3001) or as configured.  
 
-🔗 O backend estará disponível em [http://localhost:3001](http://localhost:3001) ou conforme configurado.
+## 📂 Project Structure  
 
-## 📂 Estrutura do Projeto
+📁 **client/** → Frontend code with React, Vite, and Tailwind CSS  
+  - 📦 **src/components/** → Reusable components (`AccountDropdown`, `PasswordGenerator`)  
+  - 📦 **src/containers/** → Pages (`Dashboard`, `Login`, `Register`)  
 
-📁 **client/** → Código do frontend com React, Vite e Tailwind CSS  
-  - 📦 **src/components/** → Componentes reutilizáveis (`AccountDropdown`, `PasswordGenerator`)  
-  - 📦 **src/containers/** → Páginas (`Dashboard`, `Login`, `Register`)  
+📁 **server/** → Backend code with NestJS  
+  - 📦 **src/modules/** → Modules (`accounts`, `users`, `tokens`)  
+  - 📦 **prisma/** → Configuration files and migrations  
 
-📁 **server/** → Código do backend com NestJS  
-  - 📦 **src/modules/** → Módulos (`accounts`, `users`, `tokens`)  
-  - 📦 **prisma/** → Arquivos de configuração e migrações  
+## ☁️ Deployment  
 
-## ☁️ Deploy
-
-O projeto contém arquivos de configuração para deploy:  
-- **🔧 Vercel:** Arquivo `vercel.json` para fácil integração no frontend e backend.  
-- **🐳 Docker:** Utilize o `docker-compose.yaml` para rodar toda a stack com Docker.  
-
+The project includes configuration files for deployment:  
+- **🔧 Vercel:** `vercel.json` file for easy frontend and backend deployment.  
+- **🐳 Docker:** Use `docker-compose.yaml` to run the entire stack with Docker.  
