@@ -49,8 +49,8 @@ Accountz is a full-stack application for managing accounts and passwords, featur
 
 1. Clone the repository:  
    ```bash
-   git clone https://your-repo-url.git
-   cd accountz-main
+   git clone https://github.com/Mathesu-veLi/accountz.git
+   cd accountz
    ```
 2. Create environment files:  
    - 🖥 **Frontend:** Create a `.env` file in the `client/` folder following the provided example.  
