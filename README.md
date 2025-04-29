@@ -14,6 +14,8 @@ Accountz is a full-stack application for managing accounts and passwords, featur
   - [🖥 Backend](#-backend)  
 - [📂 Project Structure](#-project-structure)  
 - [☁️ Deployment](#-deployment)  
+- [🎥 Demo](#-demo)  
+- [☁️ Deployment](#-deployment)  
 
 ## ✨ Features  
 
@@ -103,6 +105,12 @@ Accountz is a full-stack application for managing accounts and passwords, featur
 📁 **server/** → Backend code with NestJS  
   - 📦 **src/modules/** → Modules (`accounts`, `users`, `tokens`)  
   - 📦 **prisma/** → Configuration files and migrations  
+  
+### 🎥 Demo
+
+Você pode assistir à demonstração do Accountz clicando no link abaixo:
+
+👉 [📽️ Ver vídeo de demonstração](videos/accountz.mp4)
 
 ## ☁️ Deployment  
 
