@@ -108,7 +108,7 @@ Accountz is a full-stack application for managing accounts and passwords, featur
   
 ### 🎥 Demo
 
-[![Watch the demo](https://img.youtube.com/vi/XBvH-Zdueog/0.jpg)](https://www.youtube.com/watch?v=XBvH-Zdueog)
+[![Watch the demo](https://img.youtube.com/vi/1OpyfoMtNGI/0.jpg)](https://www.youtube.com/watch?v=1OpyfoMtNGI)
 
 ## ☁️ Deployment  
 
