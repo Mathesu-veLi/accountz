@@ -93,7 +93,10 @@ Accountz is a full-stack application for managing accounts and passwords, featur
   - 📦 **src/modules/** → Modules (`accounts`, `users`, `tokens`)  
   - 📦 **prisma/** → Configuration files and migrations  
   
-### 🎥 Demo
+## 🎥 Demo
+
+🌐 Website: https://accountz.vercel.app
+🔗 API: https://accountz.onrender.com
 
 [![Watch the demo](https://img.youtube.com/vi/1OpyfoMtNGI/0.jpg)](https://www.youtube.com/watch?v=1OpyfoMtNGI)
 
