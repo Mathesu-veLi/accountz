@@ -8,7 +8,6 @@ Accountz is a full-stack application for managing accounts and passwords, featur
 - [🛠 Technologies](#-technologies)  
 - [📥 Installation](#-installation)  
   - [⚙ Requirements](#-requirements)  
-  - [📑 Environment Setup](#-environment-setup)  
 - [▶️ Running the Project](#-running-the-project)  
   - [🎨 Frontend](#-frontend)  
   - [🖥 Backend](#-backend)  
