@@ -47,17 +47,6 @@ Accountz is a full-stack application for managing accounts and passwords, featur
 - 🗃 Database (PostgreSQL, MySQL, or SQLite via Prisma)  
 - 🐳 Docker (optional, for running the stack via docker-compose)  
 
-### 📑 Environment Setup  
-
-1. Clone the repository:  
-   ```bash
-   git clone https://github.com/Mathesu-veLi/accountz.git
-   cd accountz
-   ```
-2. Create environment files:  
-   - 🖥 **Frontend:** Create a `.env` file in the `client/` folder following the provided example.  
-   - 🗄 **Backend:** Configure the necessary environment variables for Prisma and NestJS (`.env` in the backend root).  
-
 ## ▶️ Running the Project  
 
 ### 🎨 Frontend  
@@ -74,7 +63,7 @@ Accountz is a full-stack application for managing accounts and passwords, featur
    ```bash
    pnpm run dev
    ```  
-💡 The frontend will be available at [http://localhost:3000](http://localhost:3000) or as defined in Vite.  
+💡 The frontend will be available at [http://localhost:3000](http://localhost:5173) or as defined in Vite.  
 
 ### 🖥 Backend  
 
@@ -94,7 +83,7 @@ Accountz is a full-stack application for managing accounts and passwords, featur
    ```bash
    pnpm run start:dev
    ```  
-🔗 The backend will be available at [http://localhost:3001](http://localhost:3001) or as configured.  
+🔗 The backend will be available at [http://localhost:3001](http://localhost:3110) or as configured.  
 
 ## 📂 Project Structure  
 
