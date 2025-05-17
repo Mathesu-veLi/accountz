@@ -18,11 +18,21 @@ export class TokenService {
     if (!passwordIsValid(createTokenDto.password, user.password))
       return passwordIsNotValid();
 
+    function getEnvOrThrow(name: string): string {
+      const value = process.env[name];
+      if (!value) {
+        throw new Error(`Environment variable ${name} is missing`);
+      }
+      return value;
+    }
+
     const token = sign(
       { id: user.id, email: user.email },
-      process.env.TOKEN_SECRET,
+      getEnvOrThrow('TOKEN_SECRET'),
       {
-        expiresIn: process.env.TOKEN_EXPIRATION,
+        expiresIn: getEnvOrThrow(
+          'TOKEN_EXPIRATION',
+        ) as `${number}${'s' | 'm' | 'h' | 'd'}`,
       },
     );
 
