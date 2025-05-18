@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   Command,
   CommandInput,
@@ -14,6 +14,9 @@ import {
 } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { api } from '@/lib/axios';
+import { IAccount } from '@/interfaces/IAccount';
+import { useUserStore } from '@/store/useUserStore';
 
 interface WebsiteOption {
   name: string;
@@ -28,9 +31,24 @@ interface ComboBoxWithAddProps {
 export function ComboBoxWithAdd({ value, onChange }: ComboBoxWithAddProps) {
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState<WebsiteOption[]>([
-    { name: 'Netflix', url: 'https://www.netflix.com' },
-    { name: 'GitHub', url: 'https://github.com' },
+    { name: '', url: '' },
   ]);
+
+  const { id } = useUserStore().user;
+  useEffect(() => {
+    api.get(`users/${id}`).then((res: { data: { accounts: IAccount[] } }) => {
+      const accounts: WebsiteOption[] = res.data.accounts.map(
+        (completeWebsiteData) => {
+          return {
+            name: completeWebsiteData.website,
+            url: completeWebsiteData.websiteUrl,
+          };
+        },
+      );
+
+      setOptions(accounts);
+    });
+  }, []);
 
   const [inputValue, setInputValue] = useState('');
   const [showAddFields, setShowAddFields] = useState(false);
