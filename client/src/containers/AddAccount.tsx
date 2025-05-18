@@ -21,6 +21,7 @@ import { ButtonLoading } from '@/components/ButtonLoading';
 import { GearIcon } from '@radix-ui/react-icons';
 import { Dialog, DialogTrigger, DialogContent } from '@/components/ui/dialog';
 import { PasswordGenerator } from '@/components/PasswordGenerator';
+import { ComboBoxWithAdd } from '@/components/ComboBoxWithAdd';
 
 const formSchema = z.object({
   website: z.string().min(1),
@@ -98,35 +99,35 @@ export function AddAccounts() {
           <form
             action=""
             onSubmit={form.handleSubmit(addAccountToStore)}
-            className="flex flex-col justify-between items-center gap-5 lg:[&_div]:w-full [&_div]:w-1/3 [&_div]:min-w-64 lg:scale-105 lg:p-5 w-full"
+            className="flex flex-col justify-between items-center gap-5 lg:[&_div]:w-full [&_div]:w-1/3 [&_div]:min-w-64 lg:scale-105 lg:p-5 w-full border rounded-sm p-4"
           >
             <h1 className="lg:text-xl font-semibold tracking-wider">Add</h1>
-            <FormField
-              control={form.control}
-              name="website"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Website name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Netflix" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="websiteUrl"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Website url</FormLabel>
-                  <FormControl>
-                    <Input placeholder="www.netflix.com" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+
+            <span className="flex flex-col gap-3">
+              <FormField
+                control={form.control}
+                name="website"
+                render={() => (
+                  <FormItem>
+                    <FormLabel>Website name</FormLabel>
+                    <FormControl>
+                      <ComboBoxWithAdd
+                        value={{
+                          name: form.watch('website'),
+                          url: form.watch('websiteUrl'),
+                        }}
+                        onChange={(val) => {
+                          form.setValue('website', val.name);
+                          form.setValue('websiteUrl', val.url);
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </span>
+
             <FormField
               control={form.control}
               name="username"
