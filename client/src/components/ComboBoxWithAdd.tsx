@@ -37,18 +37,24 @@ export function ComboBoxWithAdd({ value, onChange }: ComboBoxWithAddProps) {
   const { id } = useUserStore().user;
   useEffect(() => {
     api.get(`users/${id}`).then((res: { data: { accounts: IAccount[] } }) => {
-      const accounts: WebsiteOption[] = res.data.accounts.map(
-        (completeWebsiteData) => {
-          return {
+      const newAccounts: WebsiteOption[] = [];
+
+      res.data.accounts.forEach((completeWebsiteData) => {
+        const websiteAlreadyExists = newAccounts.find(
+          (opt) => opt.name === completeWebsiteData.website,
+        );
+
+        if (!websiteAlreadyExists) {
+          newAccounts.push({
             name: completeWebsiteData.website,
             url: completeWebsiteData.websiteUrl,
-          };
-        },
-      );
+          });
+        }
+      });
 
-      setOptions(accounts);
+      setOptions(newAccounts);
     });
-  }, []);
+  }, [id]);
 
   const [inputValue, setInputValue] = useState('');
   const [showAddFields, setShowAddFields] = useState(false);
