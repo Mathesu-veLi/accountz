@@ -103,30 +103,28 @@ export function AddAccounts() {
           >
             <h1 className="lg:text-xl font-semibold tracking-wider">Add</h1>
 
-            <span className="flex flex-col gap-3">
-              <FormField
-                control={form.control}
-                name="website"
-                render={() => (
-                  <FormItem>
-                    <FormLabel>Website name</FormLabel>
-                    <FormControl>
-                      <ComboBoxWithAdd
-                        value={{
-                          name: form.watch('website'),
-                          url: form.watch('websiteUrl'),
-                        }}
-                        onChange={(val) => {
-                          form.setValue('website', val.name);
-                          form.setValue('websiteUrl', val.url);
-                        }}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </span>
+            <FormField
+              control={form.control}
+              name="website"
+              render={() => (
+                <FormItem>
+                  <FormLabel>Website name</FormLabel>
+                  <FormControl>
+                    <ComboBoxWithAdd
+                      value={{
+                        name: form.watch('website'),
+                        url: form.watch('websiteUrl'),
+                      }}
+                      onChange={(val) => {
+                        form.setValue('website', val.name);
+                        form.setValue('websiteUrl', val.url);
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <FormField
               control={form.control}
