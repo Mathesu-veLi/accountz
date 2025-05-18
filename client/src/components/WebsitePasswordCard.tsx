@@ -16,7 +16,7 @@ export function WebsiteAccountCard(props: IProps) {
     >
       <div className="p-4 border rounded-sm w-16 h-16 flex justify-center items-center">
         <img
-          src={`https://${props.firstAccount.websiteUrl}/favicon.ico`}
+          src={`${props.firstAccount.websiteUrl}/favicon.ico`}
           className="w-full h-full"
         />
       </div>
