@@ -98,7 +98,7 @@ export function AddAccounts() {
           <form
             action=""
             onSubmit={form.handleSubmit(addAccountToStore)}
-            className="flex flex-col justify-between items-center gap-5 lg:[&_div]:w-full [&_div]:w-64 lg:scale-105 lg:p-5 w-full"
+            className="flex flex-col justify-between items-center gap-5 lg:[&_div]:w-full [&_div]:w-1/3 [&_div]:min-w-64 lg:scale-105 lg:p-5 w-full"
           >
             <h1 className="lg:text-xl font-semibold tracking-wider">Add</h1>
             <FormField
@@ -166,7 +166,7 @@ export function AddAccounts() {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <div className="flex justify-center items-center gap-3">
+                    <span className="w-full flex justify-between">
                       <PasswordInput placeholder="password" {...field} />
 
                       <Dialog>
@@ -179,7 +179,7 @@ export function AddAccounts() {
                           <PasswordGenerator setFormPassword={setPassword} />
                         </DialogContent>
                       </Dialog>
-                    </div>
+                    </span>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
