@@ -4,27 +4,41 @@ import { api } from '@/lib/axios';
 import { useAccountStore } from '@/store/useAccountStore';
 import { useUserStore } from '@/store/useUserStore';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 export function Dashboard() {
   const { id } = useUserStore().user;
+  const { reset } = useUserStore();
   const { setAccounts: setStateAccounts } = useAccountStore();
   const [globalAccounts, setGlobalAccounts] = useState<IAccount[]>([]);
   const [accounts, setAccounts] = useState<Record<string, IAccount[]>>();
   const [isLoading, setIsLoading] = useState(false);
   const accountsTemp: Record<string, IAccount[]> = {};
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (id) {
       setIsLoading(true);
-      api.get(`users/${id}`).then((res: { data: { accounts: IAccount[] } }) => {
-        setIsLoading(false);
-        const accounts = res.data.accounts.map((website) => {
-          delete website.password;
-          return website;
-        });
+      api
+        .get(`users/${id}`)
+        .then((res: { data: { accounts: IAccount[] } }) => {
+          const accounts = res.data.accounts.map((website) => {
+            delete website.password;
+            return website;
+          });
 
-        setGlobalAccounts(accounts);
-      });
+          setGlobalAccounts(accounts);
+        })
+        .catch((e) => {
+          if (e.response.status === 404) {
+            reset();
+            navigate('/login');
+            toast.error(e.response.data.message);
+          }
+        })
+        .finally(() => setIsLoading(false));
     }
   }, [id]);
 
