@@ -22,7 +22,11 @@ export function Dashboard() {
     if (id) {
       setIsLoading(true);
       api
-        .get(`users/${id}`)
+        .get(`users/${id}`, {
+          headers: {
+            Authorization: process.env.ADMIN_PASSWORD,
+          },
+        })
         .then((res: { data: { accounts: IAccount[] } }) => {
           const accounts = res.data.accounts.map((website) => {
             delete website.password;

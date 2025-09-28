@@ -34,24 +34,30 @@ export function ComboBoxWithAdd({ value, onChange }: ComboBoxWithAddProps) {
 
   const { id } = useUserStore().user;
   useEffect(() => {
-    api.get(`users/${id}`).then((res: { data: { accounts: IAccount[] } }) => {
-      const newAccounts: WebsiteOption[] = [];
+    api
+      .get(`users/${id}`, {
+        headers: {
+          Authorization: process.env.ADMIN_PASSWORD,
+        },
+      })
+      .then((res: { data: { accounts: IAccount[] } }) => {
+        const newAccounts: WebsiteOption[] = [];
 
-      res.data.accounts.forEach((completeWebsiteData) => {
-        const websiteAlreadyExists = newAccounts.find(
-          (opt) => opt.name === completeWebsiteData.website,
-        );
+        res.data.accounts.forEach((completeWebsiteData) => {
+          const websiteAlreadyExists = newAccounts.find(
+            (opt) => opt.name === completeWebsiteData.website,
+          );
 
-        if (!websiteAlreadyExists) {
-          newAccounts.push({
-            name: completeWebsiteData.website,
-            url: completeWebsiteData.websiteUrl,
-          });
-        }
+          if (!websiteAlreadyExists) {
+            newAccounts.push({
+              name: completeWebsiteData.website,
+              url: completeWebsiteData.websiteUrl,
+            });
+          }
+        });
+
+        setOptions(newAccounts);
       });
-
-      setOptions(newAccounts);
-    });
   }, [id]);
 
   const [inputValue, setInputValue] = useState('');
